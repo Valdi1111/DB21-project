@@ -2,8 +2,8 @@
 
 function Home() {
     return (
-        <main>
-
+        <main className="px-3">
+            <h1>Home</h1>
         </main>
     );
 }

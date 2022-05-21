@@ -5,18 +5,18 @@ import Home from './components/Home';
 import Shop from './components/Shop';
 
 function App() {
-  return (
-    <div className="App container">
-      <BrowserRouter>
-          <Header />
-          <Routes>
-              <Route index element={<Home />} />
-              <Route path="shop" element={<Shop />} />
-          </Routes>
-          <Footer />
-      </BrowserRouter>
-    </div>
-  );
+    return (
+        <div className="container">
+            <BrowserRouter>
+                <Header/>
+                <Routes>
+                    <Route index element={<Home/>}/>
+                    <Route path="shop" element={<Shop/>}/>
+                </Routes>
+                <Footer/>
+            </BrowserRouter>
+        </div>
+    );
 }
 
 export default App;
