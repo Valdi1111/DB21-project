@@ -1,11 +1,19 @@
+import Header from "./Header";
+import Footer from "./Footer";
 
 
 function Home() {
+
     return (
-        <main className="px-3">
-            <h1>Home</h1>
-        </main>
+        <>
+            <Header/>
+            <main className="px-3">
+                <h1>Home</h1>
+            </main>
+            <Footer/>
+        </>
     );
+
 }
 
 export default Home;

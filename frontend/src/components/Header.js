@@ -1,49 +1,46 @@
-import {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, Navigate, useLocation, useNavigate} from "react-router-dom";
+import AuthService from "../services/auth-service"
 import wine from '../icons/wine-glass-solid.svg'
 
-function loggedIn() {
-    return (
-        <div className="dropdown text-end">
-            <a href="#" className="d-block link-dark text-decoration-none dropdown-toggle"
-               id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32"
-                     className="rounded-circle"/>
-            </a>
-            <ul className="dropdown-menu text-small" aria-labelledby="dropdownUser">
-                <li><a className="dropdown-item" href="#">New project...</a></li>
-                <li><a className="dropdown-item" href="#">Settings</a></li>
-                <li><a className="dropdown-item" href="#">Profile</a></li>
-                <li>
-                    <hr className="dropdown-divider"/>
-                </li>
-                <li><a className="dropdown-item" href="#">Sign out</a></li>
-            </ul>
-        </div>
-    );
-}
-
-function notLoggedIn() {
-    return (
-        <div className="text-end">
-            <button type="button" className="btn btn-outline-primary me-2">Login</button>
-            <button type="button" className="btn btn-primary">Sign-up</button>
-        </div>
-    );
-}
-
 function Header() {
-    const [isLoggedIn, setLogin] = useState();
+    const user = AuthService.getUser();
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    useEffect(() => {
-        if (localStorage.getItem("token") !== null) {
-            setLogin(true);
-        } else {
-            setLogin(false);
-        }
-    });
+    function handleLogout(e) {
+        AuthService.logout();
+        navigate("/");
+    }
 
-    console.log("Logged-in: " + isLoggedIn);
+    let login;
+    if(user) {
+        login = (
+            <div className="dropdown text-end">
+                <a href="#" className="d-block link-dark text-decoration-none dropdown-toggle"
+                   id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32"
+                         className="rounded-circle"/>
+                </a>
+                <ul className="dropdown-menu text-small" aria-labelledby="dropdownUser">
+                    <li><a className="dropdown-item" href="#">{user.name}</a></li>
+                    <li><a className="dropdown-item" href="#">New project...</a></li>
+                    <li><a className="dropdown-item" href="#">Settings</a></li>
+                    <li><a className="dropdown-item" href="#">Profile</a></li>
+                    <li>
+                        <hr className="dropdown-divider"/>
+                    </li>
+                    <li><a className="dropdown-item" href="#" onClick={handleLogout}>Sign out</a></li>
+                </ul>
+            </div>
+        );
+    } else {
+        login = (
+            <div className="text-end">
+                <Link to="/login" replace state={{from: location}} className="btn btn-outline-primary me-2">Login</Link>
+                <button type="button" className="btn btn-primary">Sign-up</button>
+            </div>
+        );
+    }
 
     return (
         <header className="p-3 mb-3 border-bottom">
@@ -57,10 +54,11 @@ function Header() {
                     <li><a href="#" className="nav-link px-2 link-dark">Customers</a></li>
                     <li><a href="#" className="nav-link px-2 link-dark">Products</a></li>
                 </ul>
-                {isLoggedIn ? loggedIn() : notLoggedIn()}
+                {login}
             </div>
         </header>
     );
+
 }
 
 export default Header;
