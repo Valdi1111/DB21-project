@@ -5,11 +5,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
-const indexRouter = require('./routes/index');
-const loginRouter = require('./routes/login');
-const registerRouter = require('./routes/register');
-const categoriesRouter = require('./routes/categories');
-const productsRouter = require('./routes/products');
+const indexRouter = require('./routes/index_router');
+const apiRouter = require('./routes/api_router');
 
 const app = express();
 
@@ -19,10 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 app.use("/", indexRouter);
-app.use("/login", loginRouter);
-app.use("/register", registerRouter);
-app.use("/categories", categoriesRouter);
-app.use("/products", productsRouter);
+app.use("/api", apiRouter);
 
 // Handling Errors
 app.use((err, req, res, next) => {
@@ -34,6 +28,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(8080,() => console.log('Server is running on port 3000'));
+app.listen(() => console.log('Server is running on port ' + app.get('port')));
 
 module.exports = app;
