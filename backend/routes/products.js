@@ -7,7 +7,7 @@ router.get(
     "/",
     (req, res, next) => {
         db.query(
-            `SELECT id, title, description, image, price, amount FROM product;`,
+            `SELECT id, title, description, image, price FROM product;`,
             (err, results, fields) => {
                 // db error
                 if (err) {
