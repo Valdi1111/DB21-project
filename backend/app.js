@@ -1,20 +1,17 @@
-const createError = require('http-errors');
 const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
 const indexRouter = require('./routes/index_router');
 const apiRouter = require('./routes/api_router');
 
+// Setup app
 const app = express();
-
 app.use(express.json());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
+// Add routes
 app.use("/", indexRouter);
 app.use("/api", apiRouter);
 

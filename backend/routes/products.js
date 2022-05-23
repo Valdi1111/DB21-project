@@ -1,40 +1,35 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const db = require('../models/db');
+const db = require("../models/db");
+const response = require("../methods/response");
 
 router.get(
-    '/',
+    "/",
     (req, res, next) => {
         db.query(
             `SELECT id, title, description, image, price, amount FROM product;`,
-            (error, results, fields) => {
-                // error
-                if (error) {
-                    //throw err;
-                    return res.status(400).send({
-                        error: error
-                    });
+            (err, results, fields) => {
+                // db error
+                if (err) {
+                    return response.internalError();
                 }
-                return res.json({error: false, data: results});
+                return res.json(results);
             }
         );
     }
 );
 
 router.get(
-    '/:id',
+    "/:id",
     (req, res, next) => {
         db.query(
             `SELECT * FROM product WHERE id = ${db.escape(req.params.id)};`,
-            (error, results, fields) => {
-                // error
-                if (error) {
-                    //throw err;
-                    return res.status(400).send({
-                        error: error
-                    });
+            (err, results, fields) => {
+                // db error
+                if (err) {
+                    return response.internalError();
                 }
-                return res.json({error: false, data: results[0]});
+                return res.json(results[0]);
             }
         );
     }
