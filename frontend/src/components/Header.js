@@ -1,4 +1,4 @@
-import {Link, Navigate, useLocation, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import AuthService from "../services/auth-service"
 import wine from '../icons/wine-glass-solid.svg'
 
