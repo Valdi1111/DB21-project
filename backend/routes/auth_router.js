@@ -13,7 +13,7 @@ router.post(
             (err, result) => {
                 // db error
                 if (err) {
-                    return response.internalError();
+                    return response.internalError(res, err);
                 }
                 // unauthorized - user does not exists
                 if (!result.length) {
@@ -24,13 +24,17 @@ router.post(
                     req.body.password,
                     result[0]["password"],
                     (bErr, bResult) => {
-                        // unauthorized - wrong password
+                        // error
                         if (bErr) {
+                            return response.internalError(res, err);
+                        }
+                        // unauthorized - wrong password
+                        if (!bResult) {
                             return response.unauthorized(res, "wrong_password", "Email or password is incorrect!");
                         }
                         const token = jwt.sign({id: result[0].id}, process.env.SECRET, {expiresIn: "1h"});
                         db.query(`UPDATE user SET last_login = now() WHERE id = ${result[0].id}`);
-                        return res.status(200).json({
+                        return res.json({
                             token,
                             user: result[0]
                         });
@@ -49,7 +53,7 @@ router.post(
             (err, result) => {
                 // db error
                 if (err) {
-                    return response.internalError();
+                    return response.internalError(res, err);
                 }
                 // email is already registered
                 if (result.length) {
@@ -62,7 +66,7 @@ router.post(
                 bcrypt.hash(req.body.password, 10, (err, hash) => {
                     // hash error
                     if (err) {
-                        return response.internalError();
+                        return response.internalError(res, err);
                     }
                     // has hashed pw => add to database
                     db.query(
@@ -70,7 +74,7 @@ router.post(
                         (err, result) => {
                             // db error
                             if (err) {
-                                return response.internalError();
+                                return response.internalError(res, err);
                             }
                             // created
                             return res.status(201).send({
