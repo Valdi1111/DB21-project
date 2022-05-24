@@ -14,8 +14,9 @@ exports.unauthorized = function (res, err, msg) {
     return error(res, 401, err, msg);
 }
 
-exports.internalError = function (res, err, msg) {
-    return res.status(500);
+exports.internalError = function (res, err) {
+    console.error(err);
+    return error(res, 500, "internal_error", "Internal server error!");
 }
 
 // 400 - bad request

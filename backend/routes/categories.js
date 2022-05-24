@@ -11,7 +11,7 @@ router.get(
             (err, results, fields) => {
                 // db error
                 if (err) {
-                    return response.internalError();
+                    return response.internalError(res, err);
                 }
                 return res.json(results);
             }

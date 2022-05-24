@@ -23,10 +23,10 @@ exports.tokenCheck = function (req, res, next) {
 
 exports.buyerCheck = function (req, res, next) {
     db.query(
-        `SELECT * FROM user INNER JOIN client ON user.id = client.id WHERE user.id = ${db.escape(req.user_id)};`,
+        `SELECT * FROM user INNER JOIN buyer ON user.id = buyer.id WHERE user.id = ${db.escape(req.user_id)};`,
         (err, result, fields) => {
             if (err) {
-                return response.internalError(res);
+                return response.internalError(res, err);
             }
             if (!result.length) {
                 return response.forbidden(res, "wrong_token", "You are not a buyer!");
@@ -42,7 +42,7 @@ exports.sellerCheck = function (req, res, next) {
         `SELECT * FROM user INNER JOIN seller ON user.id = seller.id WHERE user.id = ${db.escape(req.user_id)};`,
         (err, result, fields) => {
             if (err) {
-                return response.internalError(res);
+                return response.internalError(res, err);
             }
             if (!result.length) {
                 return response.forbidden(res, "wrong_token", "You are not a seller!");
