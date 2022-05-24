@@ -2,7 +2,7 @@ import '../css/login.css'
 import {useState} from "react";
 import {toast} from "wc-toast";
 import axios from "axios";
-import {apiAuthUrl} from "../services/api";
+import {api_auth_url} from "../services/api";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faGoogle, faFacebook, faTwitter} from '@fortawesome/free-brands-svg-icons'
 import {useLocation, useNavigate} from "react-router-dom";
@@ -27,7 +27,7 @@ function Login() {
             toast.promise(
                 new Promise((resolve, reject) => {
                     axios
-                        .post(apiAuthUrl + "signin", {email: email, password: password})
+                        .post(api_auth_url + "signin", {email: email, password: password})
                         .then(
                             res => {
                                 if (res.status === 200) {

@@ -1,10 +1,10 @@
 import axios from "axios";
-import {apiAuthUrl} from "./api";
+import {api_auth_url} from "./api";
 
 class AuthService {
 
     login(email, password) {
-        return axios.post(apiAuthUrl + "signin", {email: email, password: password});
+        return axios.post(api_auth_url + "signin", {email: email, password: password});
     }
 
     logout() {
@@ -13,7 +13,7 @@ class AuthService {
     }
 
     register(username, email, password) {
-        return axios.post(apiAuthUrl + "signup", {
+        return axios.post(api_auth_url + "signup", {
             username,
             email,
             password
