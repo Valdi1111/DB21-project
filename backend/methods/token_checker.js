@@ -2,6 +2,29 @@ const db = require("../models/db");
 const jwt = require("jsonwebtoken");
 const response = require("./response");
 
+exports.tryTokenCheck = function (req, res, next) {
+    let token = req.headers["x-access-token"];
+    if (!token) {
+        req.token = "";
+        req.user_id = -1;
+        return next();
+    }
+    jwt.verify(
+        token,
+        process.env.SECRET,
+        (err, result) => {
+            if (err) {
+                req.token = "";
+                req.user_id = -1;
+                return next();
+            }
+            req.token = token;
+            req.user_id = result.id;
+            return next();
+        }
+    )
+}
+
 exports.tokenCheck = function (req, res, next) {
     let token = req.headers["x-access-token"];
     if (!token) {
