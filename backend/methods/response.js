@@ -6,6 +6,10 @@ function error(res, code, err, msg) {
     });
 }
 
+exports.notFound = function (res, err, msg) {
+    return error(res, 404, err, msg);
+}
+
 exports.forbidden = function (res, err, msg) {
     return error(res, 403, err, msg);
 }
