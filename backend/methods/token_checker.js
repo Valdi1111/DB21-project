@@ -2,9 +2,12 @@ const db = require("../models/db");
 const jwt = require("jsonwebtoken");
 const response = require("./response");
 
-exports.tryTokenCheck = function (req, res, next) {
+function processToken(req, res, next, forbidden) {
     let token = req.headers["x-access-token"];
     if (!token) {
+        if (forbidden) {
+            return response.forbidden(res, "invalid_token", "No token provided!");
+        }
         req.token = "";
         req.user_id = -1;
         return next();
@@ -14,6 +17,9 @@ exports.tryTokenCheck = function (req, res, next) {
         process.env.SECRET,
         (err, result) => {
             if (err) {
+                if (forbidden) {
+                    return response.forbidden(res, "invalid_token", "No token provided!");
+                }
                 req.token = "";
                 req.user_id = -1;
                 return next();
@@ -25,23 +31,12 @@ exports.tryTokenCheck = function (req, res, next) {
     )
 }
 
+exports.tryTokenCheck = function (req, res, next) {
+    processToken(req, res, next, false);
+}
+
 exports.tokenCheck = function (req, res, next) {
-    let token = req.headers["x-access-token"];
-    if (!token) {
-        return response.forbidden(res, "invalid_token", "No token provided!");
-    }
-    jwt.verify(
-        token,
-        process.env.SECRET,
-        (err, result) => {
-            if (err) {
-                return response.forbidden(res, "invalid_token", "No token provided!");
-            }
-            req.token = token;
-            req.user_id = result.id;
-            next();
-        }
-    )
+    processToken(req, res, next, true);
 }
 
 exports.buyerCheck = function (req, res, next) {

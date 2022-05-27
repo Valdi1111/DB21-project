@@ -1,11 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-router.get(
-    "/profile",
-    (req, res, next) => {
-        res.json(req.seller);
-    }
-);
+const profile = require("./seller/profile");
+
+router.get("/profile", profile);
 
 module.exports = router;
