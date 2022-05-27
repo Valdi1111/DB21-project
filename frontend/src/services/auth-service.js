@@ -32,7 +32,7 @@ class AuthService {
         const token = this.getToken();
         if (token) {
             // for Node.js Express back-end
-            return { 'x-access-token': token };
+            return { "x-access-token": token };
         } else {
             return {};
         }
