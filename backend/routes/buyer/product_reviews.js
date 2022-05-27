@@ -3,6 +3,31 @@ const router = express.Router();
 const db = require("../../models/db");
 const response = require("../../methods/response");
 
+router.get(
+    "/:id/helpful",
+    (req, res, next) => {
+        // get review helpful status
+        db.query(
+            `SELECT r.id, CASE WHEN up.review_id IS NULL THEN FALSE ELSE TRUE END AS helpful
+                FROM product_has_review r 
+                    LEFT JOIN product_review_upvote up ON r.id = up.review_id AND up.upvoter_id = ${db.escape(req.user_id)}
+                WHERE r.id = ${db.escape(req.params.id)};`,
+            (err, results, fields) => {
+                // db error
+                if (err) {
+                    return response.internalError(res, err);
+                }
+                // nothing found
+                if (!results.length) {
+                    return response.notFound(res, "review_not_found", "No review found with id " + req.params.id + "!");
+                }
+                // send response
+                return res.json(results[0]);
+            }
+        );
+    }
+);
+
 router.post(
     "/:id/helpful",
     (req, res, next) => {

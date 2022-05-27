@@ -97,13 +97,11 @@ router.get(
 
 router.get(
     "/:id/faq",
-    tryTokenCheck,
     (req, res, next) => {
         // search faq
         db.query(
-            `SELECT q.id, q.question, q.answer, q.created, IFNULL(mup.vote, 0) AS upvoted, SUM(IFNULL(up.vote, 0)) AS upvotes
+            `SELECT q.id, q.question, q.answer, q.created, SUM(IFNULL(up.vote, 0)) AS upvotes
                 FROM product_has_faq q 
-                    LEFT JOIN product_faq_upvote mup ON q.id = mup.faq_id AND mup.upvoter_id = ${db.escape(req.user_id)}
                     LEFT JOIN product_faq_upvote up ON q.id = up.faq_id
                 WHERE q.product_id = ${db.escape(req.params.id)} AND q.question IS NOT NULL
                 GROUP BY q.id
@@ -163,7 +161,6 @@ router.get(
 
 router.get(
     "/:id/reviews",
-    tryTokenCheck,
     (req, res, next) => {
         const {order_by} = req.query;
         let order_type;
@@ -178,11 +175,9 @@ router.get(
         }
         // search reviews
         db.query(
-            `SELECT r.id, r.reviewer_id, u.avatar, u.username, r.created, r.rating, r.title, r.description, r.image, 
-                    CASE WHEN mup.review_id IS NULL THEN FALSE ELSE TRUE END AS upvoted, COUNT(up.review_id) AS upvotes
+            `SELECT r.id, r.reviewer_id, u.avatar, u.username, r.created, r.rating, r.title, r.description, r.image, COUNT(up.review_id) AS upvotes
                 FROM product_has_review r 
                     INNER JOIN user u ON r.reviewer_id = u.id 
-                    LEFT JOIN product_review_upvote mup ON r.id = mup.review_id AND mup.upvoter_id = ${db.escape(req.user_id)}
                     LEFT JOIN product_review_upvote up ON r.id = up.review_id
                 WHERE r.product_id = ${db.escape(req.params.id)}
                 GROUP BY r.id
