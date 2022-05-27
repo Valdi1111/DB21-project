@@ -11,7 +11,7 @@ function ProductRating(props) {
         elems.push(
             <div className="d-flex flex-start align-items-center" key={i}>
                 <Stars value={i} max_value={5}/>
-                <p className="text-muted small mb-0 ms-3">{parseInt(values[i - 1])+ "%"}</p>
+                <p className="text-muted small mb-0 ms-3">{parseInt(values[i - 1]) + "%"}</p>
             </div>
         );
     }

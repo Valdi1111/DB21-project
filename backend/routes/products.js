@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models/db");
 const response = require("../methods/response");
-const {tryTokenCheck} = require("../methods/token_checker");
 
 router.get(
     "/",
@@ -96,14 +95,14 @@ router.get(
 );
 
 router.get(
-    "/:id/faq",
+    "/:id/faqs",
     (req, res, next) => {
-        // search faq
+        // search faqs
         db.query(
             `SELECT q.id, q.question, q.answer, q.created, SUM(IFNULL(up.vote, 0)) AS upvotes
                 FROM product_has_faq q 
                     LEFT JOIN product_faq_upvote up ON q.id = up.faq_id
-                WHERE q.product_id = ${db.escape(req.params.id)} AND q.question IS NOT NULL
+                WHERE q.product_id = ${db.escape(req.params.id)} AND q.answer IS NOT NULL
                 GROUP BY q.id
                 ORDER BY upvotes DESC;`,
             (err, results, fields) => {

@@ -3,6 +3,26 @@ const router = express.Router();
 const db = require("../../models/db");
 const response = require("../../methods/response");
 
+router.post(
+    "/",
+    (req, res, next) => {
+        const {title, description, rating, product} = req.body;
+        // add review to a product
+        db.query(
+            `INSERT INTO product_has_review (title, description, rating, product_id, reviewer_id)
+                VALUES (${db.escape(title)}, ${db.escape(description)}, ${db.escape(rating)}, ${db.escape(product)}, ${db.escape(req.user_id)})`,
+            (err, results, fields) => {
+                // db error
+                if (err) {
+                    return response.internalError(res, err);
+                }
+                // send response
+                return res.send();
+            }
+        );
+    }
+);
+
 router.get(
     "/:id/helpful",
     (req, res, next) => {
@@ -41,7 +61,7 @@ router.post(
                     return response.internalError(res, err);
                 }
                 // send response
-                return res.json(results);
+                return res.send();
             }
         );
     }
@@ -60,7 +80,7 @@ router.delete(
                     return response.internalError(res, err);
                 }
                 // send response
-                return res.json(results);
+                return res.send();
             }
         );
     }

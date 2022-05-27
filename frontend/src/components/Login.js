@@ -27,7 +27,13 @@ function Login() {
             toast.promise(
                 new Promise((resolve, reject) => {
                     axios
-                        .post(api_auth_url + "signin", {email: email, password: password})
+                        .post(
+                            `${api_auth_url}signin`,
+                            {
+                                email: email,
+                                password: password
+                            }
+                        )
                         .then(
                             res => {
                                 if (res.status === 200) {
@@ -57,7 +63,7 @@ function Login() {
         } else {
             e.stopPropagation();
         }
-        e.target.classList.add('was-validated');
+        e.target.classList.add("was-validated");
     }
 
     return(
@@ -72,7 +78,7 @@ function Login() {
                         {/* Email input */}
                         <div className="form-floating mb-2">
                             <input type="email" id="email_login" className="form-control form-control-lg"
-                                   placeholder="name@example.com" onChange={(onChangeEmail)} required/>
+                                   placeholder="name@example.com" onChange={onChangeEmail} required/>
                             <label htmlFor="email_login">Email address</label>
                             <div className="invalid-feedback">Please insert a valid email.</div>
                         </div>

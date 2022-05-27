@@ -3,6 +3,26 @@ const router = express.Router();
 const db = require("../../models/db");
 const response = require("../../methods/response");
 
+router.post(
+    "/",
+    (req, res, next) => {
+        const {question, product} = req.body;
+        // add faq to a product
+        db.query(
+            `INSERT INTO product_has_faq (question, product_id)
+                VALUES (${db.escape(question)}, ${db.escape(product)})`,
+            (err, results, fields) => {
+                // db error
+                if (err) {
+                    return response.internalError(res, err);
+                }
+                // send response
+                return res.send();
+            }
+        );
+    }
+);
+
 router.get(
     "/:id/upvote",
     (req, res, next) => {
@@ -42,7 +62,7 @@ router.post(
                     return response.internalError(res, err);
                 }
                 // send response
-                return res.json(results);
+                return res.send();
             }
         );
     }

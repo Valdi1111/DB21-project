@@ -15,12 +15,12 @@ function ProductFaq(props) {
                 {headers: AuthService.authHeader()}
             )
             .then(
-                (res) => {
+                res => {
                     if (res.status === 200) {
                         setUpvote(res.data.upvote);
                     }
                 },
-                (err) => {
+                err => {
                     // do nothing
                 }
             );
@@ -34,12 +34,12 @@ function ProductFaq(props) {
                 {headers: AuthService.authHeader()}
             )
             .then(
-                (res) => {
+                res => {
                     if (res.status === 200) {
                         setUpvote(value);
                     }
                 },
-                (err) => {
+                err => {
                     if (err.response.status === 403) {
                         toast.error("You are not a buyer!");
                     }

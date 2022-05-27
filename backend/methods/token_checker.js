@@ -41,7 +41,9 @@ exports.tokenCheck = function (req, res, next) {
 
 exports.buyerCheck = function (req, res, next) {
     db.query(
-        `SELECT * FROM user INNER JOIN buyer ON user.id = buyer.id WHERE user.id = ${db.escape(req.user_id)};`,
+        `SELECT * 
+            FROM buyer b 
+            WHERE b.id = ${db.escape(req.user_id)};`,
         (err, result, fields) => {
             if (err) {
                 return response.internalError(res, err);
@@ -49,7 +51,6 @@ exports.buyerCheck = function (req, res, next) {
             if (!result.length) {
                 return response.forbidden(res, "wrong_token", "You are not a buyer!");
             }
-            req.buyer = result[0];
             next();
         }
     );
@@ -57,7 +58,9 @@ exports.buyerCheck = function (req, res, next) {
 
 exports.sellerCheck = function (req, res, next) {
     db.query(
-        `SELECT * FROM user INNER JOIN seller ON user.id = seller.id WHERE user.id = ${db.escape(req.user_id)};`,
+        `SELECT * 
+            FROM seller s 
+            WHERE s.id = ${db.escape(req.user_id)};`,
         (err, result, fields) => {
             if (err) {
                 return response.internalError(res, err);
@@ -65,7 +68,6 @@ exports.sellerCheck = function (req, res, next) {
             if (!result.length) {
                 return response.forbidden(res, "wrong_token", "You are not a seller!");
             }
-            req.seller = result[0];
             next();
         }
     );

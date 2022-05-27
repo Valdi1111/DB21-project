@@ -5,20 +5,15 @@ import axios from 'axios';
 import {api_url} from "../../services/api";
 
 function Shop() {
-    const prod = {
-        id: 2,
-        cover: "https://64.media.tumblr.com/8a85be3e602bae04d5e99d3dc64381e9/bdfe9fb06e1bb455-b4/s540x810/9ea94857dc5e85e567d95bc516c864cf5bdba0ea.jpg",
-        title: "Card title",
-        description: "Some quick example text to build on the card title and make up the bulk of the card's content.",
-        price: 12,
-        discount: 12
-    }
-
     const [categories, setCategories] = useState([]);
     useEffect(() => {
         axios
-            .get(api_url + "categories")
-            .then((res) => setCategories(res.data));
+            .get(
+                `${api_url}categories`
+            )
+            .then(
+                res => setCategories(res.data)
+            );
     }, []);
 
     const [category, setCategory] = useState(null);
@@ -38,8 +33,13 @@ function Shop() {
         }
         console.log("update: " + JSON.stringify(params));
         axios
-            .get(api_url + "products", {params})
-            .then((res) => setProducts(res.data));
+            .get(
+                `${api_url}products`,
+                {params}
+            )
+            .then(
+                res => setProducts(res.data)
+            );
     }, [category, minPrice, maxPrice]);
 
     function onCategoryClick(e) {

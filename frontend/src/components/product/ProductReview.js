@@ -14,12 +14,12 @@ function ProductReview(props) {
                 {headers: AuthService.authHeader()}
             )
             .then(
-                (res) => {
+                res => {
                     if (res.status === 200) {
                         setHelpful(res.data.helpful);
                     }
                 },
-                (err) => {
+                err => {
                     // do nothing
                 }
             );
@@ -33,12 +33,12 @@ function ProductReview(props) {
                 {headers: AuthService.authHeader()}
             )
             .then(
-                (res) => {
+                res => {
                     if (res.status === 200) {
                         setHelpful(1);
                     }
                 },
-                (err) => {
+                err => {
                     if (err.response.status === 403) {
                         toast.error("You are not a buyer!");
                     }
@@ -53,12 +53,12 @@ function ProductReview(props) {
                 {headers: AuthService.authHeader()}
             )
             .then(
-                (res) => {
+                res => {
                     if (res.status === 200) {
                         setHelpful(0);
                     }
                 },
-                (err) => {
+                err => {
                     if (err.response.status === 403) {
                         toast.error("You are not a buyer!");
                     }
