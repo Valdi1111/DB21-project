@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {avatars_url, api_buyer_url, review_images_url} from "../../services/api";
+import {avatars_url, api_buyer_url, review_images_url} from "../../services/ApiUrls";
 import axios from "axios";
 import {toast} from "wc-toast";
 import Stars from "./Stars";

@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import "../../css/shop_product.css"
-import {product_images_url} from "../../services/api";
+import {product_images_url} from "../../services/ApiUrls";
 
 function ShopProduct(props) {
     const navigate = useNavigate();

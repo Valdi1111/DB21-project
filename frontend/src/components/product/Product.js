@@ -1,6 +1,6 @@
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {api_url} from "../../services/api";
+import {api_url} from "../../services/ApiUrls";
 import axios from "axios";
 import ProductFaq from "./ProductFaq";
 import ProductReview from "./ProductReview";

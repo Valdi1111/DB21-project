@@ -2,7 +2,7 @@ import '../css/login.css'
 import {useState} from "react";
 import {toast} from "wc-toast";
 import axios from "axios";
-import {api_auth_url} from "../services/api";
+import {api_auth_url} from "../services/ApiUrls";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faGoogle, faFacebook, faTwitter} from '@fortawesome/free-brands-svg-icons'
 import {useLocation, useNavigate} from "react-router-dom";

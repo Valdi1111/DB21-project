@@ -2,7 +2,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {api_buyer_url} from "../../services/api";
+import {api_buyer_url} from "../../services/ApiUrls";
 import {toast} from "wc-toast";
 
 function ProductFaq(props) {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {api_buyer_url} from "../../services/api";
+import {api_buyer_url} from "../../services/ApiUrls";
 import {toast} from "wc-toast";
 import {useState} from "react";
 import FormData from "form-data";

@@ -1,7 +1,7 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import {Component} from "react";
 import axios from "axios";
-import {api_user_url} from "./services/api";
+import {api_user_url} from "./services/ApiUrls";
 import Home from './components/Home';
 import Login from './components/Login';
 import Shop from './components/shop/Shop';
