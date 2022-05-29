@@ -1,0 +1,66 @@
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+@import "node_modules/bootstrap/scss/mixins";
+
+.dark {
+  $enable-gradients: true;
+
+  /* redefine theme colors for dark theme */
+  /*$primary: #012345;
+  $secondary: #111111;
+  $success: #222222;
+  $dark: #000;*/
+
+  $theme-colors: (
+          "primary": $primary,
+          "secondary": $secondary,
+          "success": $success,
+          "danger": $danger,
+          "info": $indigo,
+          "dark": $dark,
+          "light": #aaa,
+  );
+
+  /* redefine theme color variables */
+  @each $color, $value in $theme-colors {
+    --#{$variable-prefix}#{$color}: #{$value};
+  }
+
+  $theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+
+  @each $color, $value in $theme-colors-rgb {
+    --#{$variable-prefix}#{$color}-rgb: #{$value};
+  }
+
+  $body-bg: #181a1b;
+  $body-color: #d1cdc7;
+  $border-color: #736b5e;
+
+  $card-bg: $body-bg;
+  $card-color: $body-color;
+  $card-border-color: rgba($white, .125);
+
+  $input-bg: $body-bg;
+  $input-color: $body-color;
+  $input-border-color: rgb(60, 65, 68);
+  $input-focus-bg: $input-bg;
+  $input-focus-color: $input-color;
+  $input-disabled-bg : rgb(35, 38, 39);
+
+  $form-select-bg: $body-bg;
+  $form-select-color: $body-color;
+  $form-select-border-color: rgb(60, 65, 68);
+
+  $form-check-bg: $body-bg;
+  $form-check-color: $body-color;
+  $form-check-border-color: rgb(60, 65, 68);
+
+  $input-group-addon-bg: #232627;
+  $input-group-addon-color: $body-color;
+  $input-group-addon-border-color: rgb(60, 65, 68);
+
+  --#{$variable-prefix}body-color: #{$body-color};
+  --#{$variable-prefix}body-bg: #{$body-bg};
+
+  @import "node_modules/bootstrap/scss/bootstrap";
+}

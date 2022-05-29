@@ -9,7 +9,7 @@ import ProductImage from "./ProductImage";
 import ProductFaqAdd from "./ProductFaqAdd";
 import ProductReviewAdd from "./ProductReviewAdd";
 
-function Product() {
+function Product(props) {
     const {id} = useParams();
 
     const [product, setProduct] = useState({});
@@ -81,7 +81,7 @@ function Product() {
 
     return (
         <main className="px-3">
-            <div className="row mx-0">
+            <div className="row mx-0 mt-3">
                 <ProductImage images={images} />
                 <div className="ps-3 pe-0 col-8">
                     <h3 className="mb-0">{product.title}</h3>
@@ -94,37 +94,50 @@ function Product() {
             <div className="border-top mt-3">
                 <div className="d-flex flex-start align-items-center">
                     <h4 className="col-auto my-3">Customer questions & answers</h4>
-                    <button className="btn btn-outline-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#faq-add" aria-expanded="false" aria-controls="faq-add">
-                        Ask question
-                    </button>
+                    {
+                        props.auth.isLoggedIn() && props.auth.isBuyer()
+                            ?
+                            <button className="btn btn-outline-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq-add" aria-expanded="false" aria-controls="faq-add">
+                                Ask question
+                            </button>
+                            :
+                            <></>
+                    }
                 </div>
-                <ProductFaqAdd product={product.id} />
                 <div className="w-75">
-                    {faq?.map(faq => <ProductFaq key={faq.id} faq={faq}/>)}
+                    <ProductFaqAdd auth={props.auth} product={product.id} />
+                    {faq?.map(faq => <ProductFaq auth={props.auth} key={faq.id} faq={faq}/>)}
                 </div>
             </div>
             <div className="border-top mt-3">
-                <div className="d-flex flex-start align-items-center">
-                    <h4 className="col-auto my-3">Customer reviews</h4>
-                    <div className="ms-3">
-                        <select className="form-select form-select-sm" defaultValue="helpful"
-                                onChange={handleReviewsOrderChange}>
-                            <option value="helpful">Top reviews</option>
-                            <option value="date">Most recent</option>
-                        </select>
-                    </div>
-                    <button className="btn btn-outline-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#review-add" aria-expanded="false" aria-controls="review-add">
-                        Add review
-                    </button>
-                </div>
-                <ProductReviewAdd product={product.id} />
                 <div className="row mx-0">
                     <div className="col-9 ps-0">
-                        {reviews?.map(review => <ProductReview key={review.id} review={review}/>)}
+                        <div className="d-flex flex-start align-items-center">
+                            <h4 className="col-auto my-3">Customer reviews</h4>
+                            <div className="ms-3">
+                                <select className="form-select form-select-sm" defaultValue="helpful"
+                                        onChange={handleReviewsOrderChange}>
+                                    <option value="helpful">Top reviews</option>
+                                    <option value="date">Most recent</option>
+                                </select>
+                            </div>
+                            {
+                                props.auth.isLoggedIn() && props.auth.isBuyer()
+                                    ?
+                                    <button className="btn btn-outline-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#review-add" aria-expanded="false" aria-controls="review-add">
+                                        Add review
+                                    </button>
+                                    :
+                                    <></>
+                            }
+                        </div>
+                        <ProductReviewAdd auth={props.auth} product={product.id} />
+                        {reviews?.map(review => <ProductReview auth={props.auth} key={review.id} review={review}/>)}
                     </div>
                     <div className="col-3 pe-0 border-start">
+                        <h4 className="my-3">Customer reviews</h4>
                         {ratings ? <ProductRating amount={ratings.amount} average={ratings.average}
                                                   ratings={ratings.ratings}/> : <></>}
                     </div>

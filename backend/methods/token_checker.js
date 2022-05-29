@@ -39,6 +39,23 @@ exports.tokenCheck = function (req, res, next) {
     processToken(req, res, next, true);
 }
 
+exports.userCheck = function (req, res, next) {
+    db.query(
+        `SELECT * 
+            FROM user u 
+            WHERE u.id = ${db.escape(req.user_id)};`,
+        (err, result, fields) => {
+            if (err) {
+                return response.internalError(res, err);
+            }
+            if (!result.length) {
+                return response.forbidden(res, "wrong_token", "You are not a user!");
+            }
+            next();
+        }
+    );
+}
+
 exports.buyerCheck = function (req, res, next) {
     db.query(
         `SELECT * 

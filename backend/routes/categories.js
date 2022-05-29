@@ -7,7 +7,8 @@ router.get(
     "/",
     (req, res, next) => {
         db.query(
-            `SELECT * FROM category;`,
+            `SELECT *
+             FROM category;`,
             (err, results, fields) => {
                 // db error
                 if (err) {

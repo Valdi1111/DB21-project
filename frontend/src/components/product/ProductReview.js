@@ -1,17 +1,19 @@
 import {useEffect, useState} from "react";
-import {api_avatar_url, api_buyer_url, api_review_image_url} from "../../services/api";
+import {avatars_url, api_buyer_url, review_images_url} from "../../services/api";
 import axios from "axios";
-import AuthService from "../../services/auth-service";
 import {toast} from "wc-toast";
 import Stars from "./Stars";
 
 function ProductReview(props) {
     const [helpful, setHelpful] = useState(0);
     useEffect(() => {
+        if (!props.auth.isLoggedIn()) {
+            return;
+        }
         axios
             .get(
                 `${api_buyer_url}reviews/${props.review.id}/helpful`,
-                {headers: AuthService.authHeader()}
+                {headers: props.auth.authHeader()}
             )
             .then(
                 res => {
@@ -25,12 +27,19 @@ function ProductReview(props) {
             );
     }, []);
 
+    useEffect(() => {
+        const tx = document.getElementsByClassName("review-description");
+        for (let i = 0; i < tx.length; i++) {
+            tx[i].style.height = (tx[i].scrollHeight + 2) + "px";
+        }
+    }, []);
+
     function handleHelpful(e) {
         axios
             .post(
                 `${api_buyer_url}reviews/${props.review.id}/helpful`,
                 {},
-                {headers: AuthService.authHeader()}
+                {headers: props.auth.authHeader()}
             )
             .then(
                 res => {
@@ -50,7 +59,7 @@ function ProductReview(props) {
         axios
             .delete(
                 `${api_buyer_url}reviews/${props.review.id}/helpful`,
-                {headers: AuthService.authHeader()}
+                {headers: props.auth.authHeader()}
             )
             .then(
                 res => {
@@ -71,7 +80,7 @@ function ProductReview(props) {
         <div className="mb-4">
             <div className="d-flex flex-start align-items-center">
                 <img className="rounded-circle shadow-1-strong me-3"
-                     src={/*api_avatar_url + props.review.avatar*/image} alt="avatar" width="50" height="50"/>
+                     src={/*avatars_url + props.review.avatars*/image} alt="avatar" width="50" height="50"/>
                 <div>
                     <h6 className="fw-bold text-primary mb-1">{props.review.username}</h6>
                     <p className="text-muted small mb-0">{"Shared publicly on " + props.review.created}</p>
@@ -80,13 +89,14 @@ function ProductReview(props) {
             <div>
                 <div className="mt-3 d-flex justify-content-start align-items-center">
                     <Stars value={props.review.rating} max_value={5}/>
-                    <h6 className="mb-0 ms-2">{props.review.title}</h6>
+                    <h6 className="mb-0 ms-2 text-break">{props.review.title}</h6>
                 </div>
-                <p className="mt-2 mb-0 pb-2">{props.review.description}</p>
+                <textarea className="mt-2 mb-2 form-control review-description" defaultValue={props.review.description}
+                          disabled={true} style={{resize: "none", overflowY: "hidden"}}/>
             </div>
             {props.review.image ?
                 <div className="mb-2">
-                    <img src={api_review_image_url + props.review.image} alt={"Review image"} height={100} width={100}/>
+                    <img src={review_images_url + props.review.image} alt="Review image" height={100} width={100}/>
                 </div>
                 :
                 <></>

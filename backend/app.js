@@ -2,8 +2,9 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-const indexRouter = require('./routes/index_router');
-const apiRouter = require('./routes/api_router');
+const index = require('./routes/index_router');
+const api = require('./routes/api_router');
+const uploads = require('./routes/uploads_router');
 
 // Setup app
 const app = express();
@@ -12,8 +13,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
 // Add routes
-app.use("/", indexRouter);
-app.use("/api", apiRouter);
+app.use("/", index);
+app.use("/api", api);
+app.use("/uploads", uploads);
 
 // Handling Errors
 app.use((err, req, res, next) => {

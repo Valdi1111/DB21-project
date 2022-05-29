@@ -31,7 +31,6 @@ function Shop() {
         if (maxPrice) {
             params.max_price = maxPrice;
         }
-        console.log("update: " + JSON.stringify(params));
         axios
             .get(
                 `${api_url}products`,
@@ -69,9 +68,10 @@ function Shop() {
     }
 
     return (
-        <main className="mx-0 row">
+        <main className="mx-0 py-3 row">
             <aside className="px-3 col-3 border-end">
-                <nav className="card navbar navbar-light rounded flex-column align-items-stretch py-0 mt-2">
+                {/* SOTTO navbar navbar-light */}
+                <nav className="card rounded flex-column align-items-stretch py-0 mt-2">
                     <h5 className="card-header p-3">Categories</h5>
                     <nav className="card-body nav nav-pills flex-column">
                         {/*

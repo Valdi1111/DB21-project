@@ -7,7 +7,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faGoogle, faFacebook, faTwitter} from '@fortawesome/free-brands-svg-icons'
 import {useLocation, useNavigate} from "react-router-dom";
 
-function Login() {
+function Login(props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -37,8 +37,7 @@ function Login() {
                         .then(
                             res => {
                                 if (res.status === 200) {
-                                    localStorage.setItem("token", res.data.token);
-                                    localStorage.setItem("user", JSON.stringify(res.data.user));
+                                    props.auth.setToken(res.data.token);
                                     if(location.state?.from) {
                                         navigate(location.state.from);
                                     } else {

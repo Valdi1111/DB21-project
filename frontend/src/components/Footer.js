@@ -4,8 +4,12 @@ import {faCopyright} from '@fortawesome/free-regular-svg-icons'
 
 function Footer() {
 
+    function handleThemeSwitch(e) {
+        document.querySelector("body").classList.toggle("dark");
+    }
+
     return (
-        <footer className="mt-3 border-top">
+        <footer className="border-top mt-auto">
             <div className="pt-3 mx-0 row">
                 <div className="my-3 px-3 col-md-12 text-center text-md-start col-lg-8 order-lg-0"><a
                     href="#">anymeme</a></div>
@@ -32,7 +36,8 @@ function Footer() {
                         <FontAwesomeIcon icon={faTwitter}/>
                     </a>
                     <div className="form-switch">
-                        <input className="form-check-input me-2" type="checkbox" role="switch" id="theme_switch"/>
+                        <input className="form-check-input me-2" type="checkbox" role="switch" id="theme_switch"
+                               onChange={handleThemeSwitch}/>
                         <label className="form-check-label" htmlFor="theme_switch">Dark Theme</label>
                     </div>
                 </section>

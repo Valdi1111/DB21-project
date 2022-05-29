@@ -1,7 +1,6 @@
 import axios from "axios";
 import {api_buyer_url} from "../../services/api";
 import {toast} from "wc-toast";
-import AuthService from "../../services/auth-service";
 import {useState} from "react";
 
 function ProductFaqAdd(props) {
@@ -21,7 +20,7 @@ function ProductFaqAdd(props) {
                         question: question,
                         product: props.product
                     },
-                    {headers: AuthService.authHeader()}
+                    {headers: props.auth.authHeader()}
                 )
                 .then(
                     res => {
@@ -45,10 +44,10 @@ function ProductFaqAdd(props) {
 
     return (
         <form className="collapse mb-3" id="faq-add" onSubmit={handleSubmit} noValidate={true}>
-            <div className="form-floating mb-2">
-                <textarea style={{height: "7rem"}} id="faq_question" className="form-control" minLength={100}
-                          maxLength={2000} placeholder="Question here" onChange={handleQuestionChange} required/>
-                <label htmlFor="faq_question">Question</label>
+            <div className="input-group mb-2">
+                <label className="input-group-text" htmlFor="faq_question">Question</label>
+                <textarea id="faq_question" className="form-control" style={{height: "7rem"}} minLength={100}
+                          maxLength={2000} onChange={handleQuestionChange} required/>
                 <div className="invalid-feedback">Question must be at least 100 characters.</div>
             </div>
             <button type="submit" className="btn btn-outline-success btn-block w-100">Commit</button>

@@ -3,6 +3,6 @@ const router = express.Router();
 
 const profile = require("./seller/profile");
 
-router.get("/profile", profile);
+router.use("/settings", profile);
 
 module.exports = router;

@@ -1,13 +1,14 @@
 import axios from "axios";
 import {api_buyer_url} from "../../services/api";
 import {toast} from "wc-toast";
-import AuthService from "../../services/auth-service";
 import {useState} from "react";
+import FormData from "form-data";
 
 function ProductReviewAdd(props) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState(1);
+    const [image, setImage] = useState(null);
 
     function handleTitleChange(e) {
         setTitle(e.target.value);
@@ -21,19 +22,29 @@ function ProductReviewAdd(props) {
         setRating(e.target.value);
     }
 
+    function handleImageChange(e) {
+        setImage(e.target.files[0]);
+    }
+
     function handleSubmit(e) {
         e.preventDefault();
         if (e.target.checkValidity()) { // use can also use e.target.reportValidity
+            let data = new FormData();
+            data.append("title", title);
+            data.append("description", description);
+            data.append("rating", rating);
+            data.append("product", props.product);
+            data.append("image", image, image.name);
             axios
                 .post(
                     `${api_buyer_url}reviews`,
+                    data,
                     {
-                        title: title,
-                        description: description,
-                        rating: rating,
-                        product: props.product
-                    },
-                    {headers: AuthService.authHeader()}
+                        headers: {
+                            "content-type": "multipart/form-data",
+                            "x-access-token": props.auth.getToken()
+                        }
+                    }
                 )
                 .then(
                     res => {
@@ -57,19 +68,20 @@ function ProductReviewAdd(props) {
 
     return (
         <form className="collapse mb-3" id="review-add" onSubmit={handleSubmit} noValidate={true}>
-            <div className="form-floating mb-2">
-                <input type="text" id="review_title" className="form-control" placeholder="Title here" minLength={10}
-                       maxLength={100} onChange={handleTitleChange} required/>
-                <label htmlFor="review_title">Title</label>
+            <div className="input-group mb-2">
+                <label className="input-group-text" htmlFor="review_title">Title</label>
+                <input id="review_title" type="text" className="form-control" minLength={10} maxLength={100}
+                       onChange={handleTitleChange} required/>
                 <div className="invalid-feedback">Title must be at least 10 characters.</div>
             </div>
-            <div className="form-floating mb-2">
-                <textarea style={{height: "7rem"}} id="review_description" className="form-control" minLength={100}
-                          maxLength={2000} placeholder="Description here" onChange={handleDescriptionChange} required/>
-                <label htmlFor="review_description">Description</label>
+            <div className="input-group mb-2">
+                <label className="input-group-text" htmlFor="review_description">Description</label>
+                <textarea id="review_description" style={{height: "7rem"}} className="form-control" minLength={100}
+                          maxLength={2000} onChange={handleDescriptionChange} required/>
                 <div className="invalid-feedback">Description must be at least 100 characters.</div>
             </div>
-            <div className="form-floating mb-2">
+            <div className="input-group mb-2">
+                <label className="input-group-text" htmlFor="review_rating">Rating</label>
                 <select id="review_rating" className="form-select" aria-label="Select rating"
                         onChange={handleRatingChange} required>
                     <option value="1">One</option>
@@ -78,8 +90,13 @@ function ProductReviewAdd(props) {
                     <option value="4">Four</option>
                     <option value="5">Five</option>
                 </select>
-                <label htmlFor="review_rating">Rating</label>
                 <div className="invalid-feedback">You must select a rating.</div>
+            </div>
+            <div className="input-group mb-2">
+                <label className="input-group-text" htmlFor="review_image">Image</label>
+                <input type="file" id="review_image" className="form-control" accept="image/jpeg,image/png"
+                       onChange={handleImageChange}/>
+                <div className="invalid-feedback">You may select an image.</div>
             </div>
             <button type="submit" className="btn btn-outline-success btn-block w-100">Commit</button>
         </form>

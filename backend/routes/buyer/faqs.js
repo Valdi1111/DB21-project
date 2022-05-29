@@ -10,7 +10,7 @@ router.post(
         // add faq to a product
         db.query(
             `INSERT INTO product_has_faq (question, product_id)
-                VALUES (${db.escape(question)}, ${db.escape(product)})`,
+             VALUES (${db.escape(question)}, ${db.escape(product)});`,
             (err, results, fields) => {
                 // db error
                 if (err) {
@@ -26,12 +26,13 @@ router.post(
 router.get(
     "/:id/upvote",
     (req, res, next) => {
+        const {id} = req.params;
         // get faq upvote status
         db.query(
             `SELECT q.id, IFNULL(up.vote, 0) AS upvote
-                FROM product_has_faq q 
-                    LEFT JOIN product_faq_upvote up ON q.id = up.faq_id AND up.upvoter_id = ${db.escape(req.user_id)}
-                WHERE q.id = ${db.escape(req.params.id)};`,
+             FROM product_has_faq q
+                      LEFT JOIN product_faq_upvote up ON q.id = up.faq_id AND up.upvoter_id = ${db.escape(req.user_id)}
+             WHERE q.id = ${db.escape(id)};`,
             (err, results, fields) => {
                 // db error
                 if (err) {
@@ -39,7 +40,7 @@ router.get(
                 }
                 // nothing found
                 if (!results.length) {
-                    return response.notFound(res, "faq_not_found", "No faq found with id " + req.params.id + "!");
+                    return response.notFound(res, "faq_not_found", "No faq found with id " + id + "!");
                 }
                 // send response
                 return res.json(results[0]);
@@ -51,11 +52,13 @@ router.get(
 router.post(
     "/:id/upvote",
     (req, res, next) => {
+        const {id} = req.params;
+        const {vote} = req.body;
         // change faq upvote status
         db.query(
             `INSERT INTO product_faq_upvote (faq_id, upvoter_id, vote)
-                VALUES (${db.escape(req.params.id)}, ${db.escape(req.user_id)}, ${db.escape(req.body.vote)})
-                ON DUPLICATE KEY UPDATE vote = ${db.escape(req.body.vote)};`,
+             VALUES (${db.escape(id)}, ${db.escape(req.user_id)}, ${db.escape(vote)})
+             ON DUPLICATE KEY UPDATE vote = ${db.escape(vote)};`,
             (err, results, fields) => {
                 // db error
                 if (err) {

@@ -4,7 +4,8 @@ import Popper from 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './index.scss';
+import './dark.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
