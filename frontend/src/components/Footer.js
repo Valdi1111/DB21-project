@@ -1,6 +1,7 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faInstagram, faFacebook, faTwitter} from '@fortawesome/free-brands-svg-icons'
 import {faCopyright} from '@fortawesome/free-regular-svg-icons'
+import {faWineGlass} from "@fortawesome/free-solid-svg-icons";
 
 function Footer() {
 
@@ -11,8 +12,9 @@ function Footer() {
     return (
         <footer className="border-top mt-auto">
             <div className="pt-3 mx-0 row">
-                <div className="my-3 px-3 col-md-12 text-center text-md-start col-lg-8 order-lg-0"><a
-                    href="#">anymeme</a></div>
+                <div className="my-3 px-3 col-md-12 text-center text-md-start col-lg-8 order-lg-0">
+                    <FontAwesomeIcon icon={faWineGlass} style={{width: 40, height: 32}}/>
+                </div>
                 <section className="mb-3 px-3 col-md-6 text-center text-md-start col-lg-4 order-lg-2">
                     <p className="m-0">Creator: Aldini, Alam, Valdifiori</p>
                     <p className="m-0">contact@anymeme.com</p>
