@@ -2,6 +2,7 @@ import axios from "axios";
 import {api_buyer_url} from "../../services/ApiUrls";
 import {toast} from "wc-toast";
 import {useState} from "react";
+import AuthService from "../../services/AuthService";
 
 function ProductFaqAdd(props) {
     const [question, setQuestion] = useState("");
@@ -20,7 +21,7 @@ function ProductFaqAdd(props) {
                         question: question,
                         product: props.product
                     },
-                    {headers: props.auth.authHeader()}
+                    {headers: AuthService.authHeader()}
                 )
                 .then(
                     res => {

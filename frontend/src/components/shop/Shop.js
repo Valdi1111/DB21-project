@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import $ from "jquery";
 import axios from 'axios';
 import {api_url} from "../../services/ApiUrls";
+import "../../css/shop.css"
 
 function Shop() {
     const [categories, setCategories] = useState([]);

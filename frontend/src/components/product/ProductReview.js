@@ -3,17 +3,18 @@ import {avatars_url, api_buyer_url, review_images_url} from "../../services/ApiU
 import axios from "axios";
 import {toast} from "wc-toast";
 import Stars from "./Stars";
+import AuthService from "../../services/AuthService";
 
 function ProductReview(props) {
     const [helpful, setHelpful] = useState(0);
     useEffect(() => {
-        if (!props.auth.isLoggedIn()) {
+        if (!AuthService.isLoggedIn()) {
             return;
         }
         axios
             .get(
                 `${api_buyer_url}reviews/${props.review.id}/helpful`,
-                {headers: props.auth.authHeader()}
+                {headers: AuthService.authHeader()}
             )
             .then(
                 res => {
@@ -39,7 +40,7 @@ function ProductReview(props) {
             .post(
                 `${api_buyer_url}reviews/${props.review.id}/helpful`,
                 {},
-                {headers: props.auth.authHeader()}
+                {headers: AuthService.authHeader()}
             )
             .then(
                 res => {
@@ -59,7 +60,7 @@ function ProductReview(props) {
         axios
             .delete(
                 `${api_buyer_url}reviews/${props.review.id}/helpful`,
-                {headers: props.auth.authHeader()}
+                {headers: AuthService.authHeader()}
             )
             .then(
                 res => {

@@ -2,8 +2,47 @@ import {Link} from "react-router-dom";
 import wine from '../../icons/wine-glass-solid.svg'
 import Logged from "./Logged";
 import NotLogged from "./NotLogged";
+import AuthService from "../../services/AuthService";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {api_user_url} from "../../services/ApiUrls";
 
-function Header(props) {
+function Header() {
+    AuthService.updateToken();
+    const [auth, setAuth] = useState(<></>);
+    useEffect(() => {
+        if (AuthService.isLoggedIn()) {
+            fetchData();
+        } else {
+            logout();
+        }
+    }, []);
+
+    function fetchData() {
+        axios
+            .get(
+                `${api_user_url}data`,
+                {headers: AuthService.authHeader()}
+            )
+            .then(
+                res => {
+                    AuthService.user = res.data;
+                    login();
+                },
+                err => {
+                    AuthService.logout();
+                    logout();
+                }
+            )
+    }
+
+    function login() {
+        setAuth(<Logged logout={logout}/>);
+    }
+
+    function logout() {
+        setAuth(<NotLogged/>);
+    }
 
     return (
         <header className="p-3 border-bottom">
@@ -17,7 +56,8 @@ function Header(props) {
                     <li><a href="#" className="nav-link px-2 link-dark">Customers</a></li>
                     <li><a href="#" className="nav-link px-2 link-dark">Products</a></li>
                 </ul>
-                {props.auth.isLoggedIn() && props.auth.getUser() ? <Logged auth={props.auth}/> : <NotLogged />}
+                {/*AuthService.isLoggedIn() && AuthService.user ? <Logged logout={logout}/> : <NotLogged/>*/}
+                {auth}
             </div>
         </header>
     );

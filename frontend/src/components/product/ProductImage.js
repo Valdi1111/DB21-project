@@ -2,10 +2,6 @@ import {Component} from "react";
 
 class CarouselButton extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <button type="button" data-bs-target="#images-carousel" data-bs-slide-to={this.props.to}
@@ -16,10 +12,6 @@ class CarouselButton extends Component {
 }
 
 class CarouselItem extends Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (
@@ -35,7 +27,7 @@ function ProductImage(props) {
     const img = "https://64.media.tumblr.com/8a85be3e602bae04d5e99d3dc64381e9/bdfe9fb06e1bb455-b4/s540x810/9ea94857dc5e85e567d95bc516c864cf5bdba0ea.jpg";
 
     return (
-        <div id="images-carousel" className="px-0 col-4 carousel slide" data-bs-ride="carousel">
+        <div id="images-carousel" className="carousel slide" data-bs-ride="carousel">
             <div className="carousel-indicators">
                 <CarouselButton to="0" label="Slide 1" active={true} />
                 <CarouselButton to="1" label="Slide 2" />

@@ -5,14 +5,15 @@ import axios from "axios";
 import {api_user_url} from "../../services/ApiUrls";
 import Notification from "./Notification";
 import {Link} from "react-router-dom";
+import AuthService from "../../services/AuthService";
 
-function Notifications(props) {
+function Notifications() {
     const [notifications, setNotifications] = useState([]);
     useEffect(() => {
         axios
             .get(
                 `${api_user_url}notifications`,
-                {headers: props.app.authHeader()}
+                {headers: AuthService.authHeader()}
             )
             .then(
                 res => {

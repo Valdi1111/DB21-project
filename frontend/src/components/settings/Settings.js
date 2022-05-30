@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react";
 import $ from "jquery";
-import {Link, useParams} from "react-router-dom";
+import {Link, Navigate, useLocation, useParams} from "react-router-dom";
 import SettingsProfile from "./SettingsProfile";
 import SettingsAddresses from "./SettingsAddresses";
 import SettingsPayments from "./SettingsPayments";
 
-function Settings(props) {
+function Settings() {
+    const location = useLocation();
     const {id} = useParams();
     const data = [
         {id: "profile", name: "Profile"},
@@ -28,9 +29,9 @@ function Settings(props) {
                 </nav>
             </aside>
             <div className="px-3 col-9">
-                {id === "profile" ? <SettingsProfile auth={props.auth}/> : <></>}
-                {id === "payments" ? <SettingsPayments auth={props.auth}/> : <></>}
-                {id === "addresses" ? <SettingsAddresses auth={props.auth}/> : <></>}
+                {id === "profile" ? <SettingsProfile/> : <></>}
+                {id === "payments" ? <SettingsPayments/> : <></>}
+                {id === "addresses" ? <SettingsAddresses/> : <></>}
             </div>
         </main>
     );

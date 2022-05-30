@@ -1,5 +1,5 @@
 
-function SettingsPayments(props) {
+function SettingsPayments() {
 
     return (
         <>

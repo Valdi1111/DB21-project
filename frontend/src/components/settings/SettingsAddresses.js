@@ -1,5 +1,5 @@
 
-function SettingsAddresses(props) {
+function SettingsAddresses() {
 
     return (
         <>

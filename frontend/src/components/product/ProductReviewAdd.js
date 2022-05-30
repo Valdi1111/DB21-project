@@ -3,6 +3,7 @@ import {api_buyer_url} from "../../services/ApiUrls";
 import {toast} from "wc-toast";
 import {useState} from "react";
 import FormData from "form-data";
+import AuthService from "../../services/AuthService";
 
 function ProductReviewAdd(props) {
     const [title, setTitle] = useState("");
@@ -42,7 +43,7 @@ function ProductReviewAdd(props) {
                     {
                         headers: {
                             "content-type": "multipart/form-data",
-                            "x-access-token": props.auth.getToken()
+                            "x-access-token": AuthService.token
                         }
                     }
                 )

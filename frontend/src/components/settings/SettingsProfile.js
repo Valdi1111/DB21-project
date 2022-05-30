@@ -1,5 +1,5 @@
 
-function SettingsProfile(props) {
+function SettingsProfile() {
 
     return (
         <>

@@ -4,17 +4,18 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {api_buyer_url} from "../../services/ApiUrls";
 import {toast} from "wc-toast";
+import AuthService from "../../services/AuthService";
 
 function ProductFaq(props) {
     const [upvote, setUpvote] = useState(0);
     useEffect(() => {
-        if (!props.auth.isLoggedIn()) {
+        if (!AuthService.isLoggedIn()) {
             return;
         }
         axios
             .get(
                 `${api_buyer_url}faqs/${props.faq.id}/upvote`,
-                {headers: props.auth.authHeader()}
+                {headers: AuthService.authHeader()}
             )
             .then(
                 res => {
@@ -32,15 +33,6 @@ function ProductFaq(props) {
         const tx = document.getElementsByClassName("faq-answer");
         for (let i = 0; i < tx.length; i++) {
             tx[i].style.height = (tx[i].scrollHeight + 2) + "px";
-            //tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;overflow-y:hidden;");
-            /*tx[i].addEventListener(
-                "input",
-                function () {
-                    tx[i].style.height = "auto";
-                    tx[i].style.height = (tx[i].scrollHeight) + "px";
-                },
-                false
-            );*/
         }
     }, []);
 
@@ -88,11 +80,11 @@ function ProductFaq(props) {
             <div className="col px-0">
                 <div className="row mx-0 mb-2">
                     <h6 className="col-auto mb-0" style={{width: "6rem"}}>Question:</h6>
-                    <p className="col mb-0 text-break">{props.faq.question}</p>
+                    <p className="col mb-0 px-0 text-break">{props.faq.question}</p>
                 </div>
                 <div className="row mx-0">
                     <h6 className="col-auto mb-0" style={{width: "6rem"}}>Answer:</h6>
-                    <div className="col">
+                    <div className="col px-0">
                         <textarea className="form-control faq-answer" defaultValue={props.faq.answer} disabled={true}
                                   style={{resize: "none", overflowY: "hidden"}}/>
                     </div>

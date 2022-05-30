@@ -6,8 +6,9 @@ import {api_auth_url} from "../services/ApiUrls";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faGoogle, faFacebook, faTwitter} from '@fortawesome/free-brands-svg-icons'
 import {useLocation, useNavigate} from "react-router-dom";
+import AuthService from "../services/AuthService";
 
-function Login(props) {
+function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -37,7 +38,7 @@ function Login(props) {
                         .then(
                             res => {
                                 if (res.status === 200) {
-                                    props.auth.setToken(res.data.token);
+                                    AuthService.setToken(res.data.token);
                                     if(location.state?.from) {
                                         navigate(location.state.from);
                                     } else {
