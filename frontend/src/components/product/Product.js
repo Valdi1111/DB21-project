@@ -98,7 +98,7 @@ function Product() {
                 <div className="d-flex flex-start align-items-center">
                     <h4 className="col-auto my-3">Customer questions & answers</h4>
                     {
-                        AuthService.isLoggedIn() && AuthService.isBuyer()
+                        AuthService.isBuyer()
                             ?
                             <button className="btn btn-outline-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#faq-add" aria-expanded="false" aria-controls="faq-add">
@@ -133,7 +133,7 @@ function Product() {
                                 </select>
                             </div>
                             {
-                                AuthService.isLoggedIn() && AuthService.isBuyer()
+                                AuthService.isBuyer()
                                     ?
                                     <button className="btn btn-outline-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#review-add" aria-expanded="false" aria-controls="review-add">

@@ -1,49 +1,10 @@
 import {Link} from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faWineGlass} from "@fortawesome/free-solid-svg-icons"
 import Logged from "./Logged";
 import NotLogged from "./NotLogged";
-import AuthService from "../../services/AuthService";
-import {useEffect, useState} from "react";
-import axios from "axios";
-import {api_user_url} from "../../services/ApiUrls";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faWineGlass} from '@fortawesome/free-solid-svg-icons'
 
-function Header() {
-    AuthService.updateToken();
-    const [auth, setAuth] = useState(<></>);
-    useEffect(() => {
-        if (AuthService.isLoggedIn()) {
-            fetchData();
-        } else {
-            logout();
-        }
-    }, []);
-
-    function fetchData() {
-        axios
-            .get(
-                `${api_user_url}data`,
-                {headers: AuthService.authHeader()}
-            )
-            .then(
-                res => {
-                    AuthService.user = res.data;
-                    login();
-                },
-                err => {
-                    AuthService.logout();
-                    logout();
-                }
-            )
-    }
-
-    function login() {
-        setAuth(<Logged logout={logout}/>);
-    }
-
-    function logout() {
-        setAuth(<NotLogged/>);
-    }
+function Header(props) {
 
     return (
         <header className="p-3 border-bottom">
@@ -57,8 +18,7 @@ function Header() {
                     <li><a href="#" className="nav-link px-2 link-dark">Customers</a></li>
                     <li><a href="#" className="nav-link px-2 link-dark">Products</a></li>
                 </ul>
-                {/*AuthService.isLoggedIn() && AuthService.user ? <Logged logout={logout}/> : <NotLogged/>*/}
-                {auth}
+                {props.logged ? <Logged logout={props.logout}/> : <NotLogged/>}
             </div>
         </header>
     );

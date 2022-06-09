@@ -20,10 +20,14 @@ function Notifications() {
                     setNotifications(res.data);
                 },
                 err => {
-
+                    //
                 }
             )
     }, []);
+
+    function readNotification(id) {
+        setNotifications(notifications.filter(n => n.id !== id));
+    }
 
     return (
         <div className="dropdown text-end">
@@ -42,7 +46,7 @@ function Notifications() {
                     <h6 className="text-uppercase mb-0">Unread notifications</h6>
                     <Link to="/settings/notifications" style={{fontSize: "85%", cursor: "pointer"}}>Show all</Link>
                 </div>
-                {notifications?.map(n => <li key={n.id}><Notification notification={n}/></li>)}
+                {notifications?.map(n => <li key={n.id}><Notification notification={n} read={readNotification}/></li>)}
             </ul>
         </div>
     );

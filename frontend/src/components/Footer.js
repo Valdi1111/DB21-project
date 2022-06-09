@@ -1,12 +1,22 @@
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faInstagram, faFacebook, faTwitter} from '@fortawesome/free-brands-svg-icons'
-import {faCopyright} from '@fortawesome/free-regular-svg-icons'
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faInstagram, faFacebook, faTwitter} from "@fortawesome/free-brands-svg-icons"
+import {faCopyright} from "@fortawesome/free-regular-svg-icons"
 import {faWineGlass} from "@fortawesome/free-solid-svg-icons";
+import $ from "jquery";
+import {useEffect, useState} from "react";
 
 function Footer() {
+    const [theme, setTheme] = useState(localStorage.getItem("theme") ? localStorage.getItem("theme") : "light");
+    useEffect(() => {
+        localStorage.setItem("theme", theme);
+        $("body").attr("data-theme", theme);
+    }, [theme]);
+    useEffect(() => {
+        $("#theme_switch").prop("checked", theme === "dark");
+    }, []);
 
     function handleThemeSwitch(e) {
-        document.querySelector("body").classList.toggle("dark");
+        setTheme(e.target.checked ? "dark" : "light");
     }
 
     return (
@@ -39,7 +49,7 @@ function Footer() {
                     </a>
                     <div className="form-switch">
                         <input className="form-check-input me-2" type="checkbox" role="switch" id="theme_switch"
-                               onChange={handleThemeSwitch}/>
+                               onChange={handleThemeSwitch} />
                         <label className="form-check-label" htmlFor="theme_switch">Dark Theme</label>
                     </div>
                 </section>

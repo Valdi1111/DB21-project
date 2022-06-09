@@ -1,14 +1,14 @@
-import '../css/login.css'
+import "../css/login.css"
 import {useState} from "react";
 import {toast} from "wc-toast";
 import axios from "axios";
 import {api_auth_url} from "../services/ApiUrls";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faGoogle, faFacebook, faTwitter} from '@fortawesome/free-brands-svg-icons'
+import image from "../images/login.svg"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faGoogle, faFacebook, faTwitter} from "@fortawesome/free-brands-svg-icons"
 import {useLocation, useNavigate} from "react-router-dom";
-import AuthService from "../services/AuthService";
 
-function Login() {
+function Login(props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -38,7 +38,7 @@ function Login() {
                         .then(
                             res => {
                                 if (res.status === 200) {
-                                    AuthService.setToken(res.data.token);
+                                    props.login(res.data.token);
                                     if(location.state?.from) {
                                         navigate(location.state.from);
                                     } else {
@@ -70,8 +70,7 @@ function Login() {
         <main className="vh-100">
             <div className="row d-flex align-items-center justify-content-center h-100 px-3 mx-0">
                 <div className="col-md-8 col-lg-7 col-xl-6">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
-                         className="img-fluid" alt="Phone image"/>
+                    <img src={image} className="img-fluid" alt="Phone image"/>
                 </div>
                 <div className="col-md-8 col-lg-5 col-xl-5 offset-xl-1">
                     <form onSubmit={handleSubmit} noValidate={true}>

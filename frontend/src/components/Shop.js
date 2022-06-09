@@ -1,11 +1,37 @@
-import ShopProduct from "./ShopProduct";
 import {useEffect, useState} from "react";
 import $ from "jquery";
 import axios from 'axios';
-import {api_url} from "../../services/ApiUrls";
-import "../../css/shop.css"
+import {api_url, product_images_url} from "../services/ApiUrls";
+import "../css/product_card.css"
+import {useNavigate} from "react-router-dom";
+
+function ShopProduct(props) {
+    const navigate = useNavigate();
+
+    function handleClick(e) {
+        navigate("/product/" + props.product.id);
+    }
+
+    const image = "https://64.media.tumblr.com/8a85be3e602bae04d5e99d3dc64381e9/bdfe9fb06e1bb455-b4/s540x810/9ea94857dc5e85e567d95bc516c864cf5bdba0ea.jpg";
+    return (
+        <div className="p-2 col-4">
+            <div onClick={handleClick} className="card product">
+                <img src={/*product_images_url + props.product.cover*/ image} className="card-img-top" alt="..."/>
+                <div className="card-body">
+                    <h5 className="card-title text-break">{props.product.title}</h5>
+                    <p className="card-text text-break">{props.product.description}</p>
+                    <span className="btn btn-primary">{props.product.price.toFixed(2) + " €"}</span>
+                </div>
+            </div>
+        </div>
+    );
+
+}
 
 function Shop() {
+    const productsPerPage = 12;
+    const [page, setPage] = useState(0);
+
     const [categories, setCategories] = useState([]);
     useEffect(() => {
         axios
@@ -17,12 +43,12 @@ function Shop() {
             );
     }, []);
 
+    const [products, setProducts] = useState([]);
     const [category, setCategory] = useState(null);
     const [minPrice, setMinPrice] = useState(null);
     const [maxPrice, setMaxPrice] = useState(null);
-    const [products, setProducts] = useState([]);
     useEffect(() => {
-        let params = {};
+        let params = {limit: productsPerPage, offset: productsPerPage * page};
         if (category) {
             params.category = category;
         }
@@ -40,17 +66,19 @@ function Shop() {
             .then(
                 res => setProducts(res.data)
             );
-    }, [category, minPrice, maxPrice]);
+    }, [category, minPrice, maxPrice, page]);
 
     function onCategoryClick(e) {
         if (e.target.id === category) {
             $(e.target).toggleClass("active");
             setCategory(null);
+            setPage(0);
             return;
         }
         $(".category").removeClass("active");
         $(e.target).addClass("active");
         setCategory(e.target.id);
+        setPage(0);
     }
 
     function onPriceClick(e) {
@@ -63,9 +91,16 @@ function Shop() {
         let max = $("#max_price").val();
         if (max) {
             setMaxPrice(max);
+            setPage(0);
         } else {
             setMaxPrice(null);
+            setPage(0);
         }
+    }
+
+    function handleNext(e) {
+        setPage(page + 1);
+        $(window).scrollTop(0);
     }
 
     return (
@@ -114,9 +149,12 @@ function Shop() {
                     </div>
                 </div>
             </aside>
-            <div className="px-3 col-9">
+            <div id="products-view" className="px-3 col-9">
                 <div className="row mx-0">
                     {products?.map(p => <ShopProduct key={p.id} product={p}/>)}
+                </div>
+                <div className="text-end pt-3">
+                    <button className="form-control btn btn-primary" onClick={handleNext}>Next</button>
                 </div>
             </div>
         </main>

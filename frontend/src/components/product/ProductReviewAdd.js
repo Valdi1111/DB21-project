@@ -37,7 +37,7 @@ function ProductReviewAdd(props) {
             data.append("product", props.product);
             data.append("image", image, image.name);
             axios
-                .post(
+                .put(
                     `${api_buyer_url}reviews`,
                     data,
                     {

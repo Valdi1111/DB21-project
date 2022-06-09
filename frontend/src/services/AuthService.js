@@ -8,11 +8,11 @@ class AuthService {
     }
 
     isBuyer() {
-        return this.user && this.user.type === "buyer";
+        return this.isLoggedIn() && this.user && this.user.type === "buyer";
     }
 
     isSeller() {
-        return this.user && this.user.type === "seller";
+        return this.isLoggedIn() && this.user && this.user.type === "seller";
     }
 
     authHeader() {

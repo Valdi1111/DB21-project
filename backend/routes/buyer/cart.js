@@ -31,15 +31,36 @@ router.get(
     }
 );
 
-router.put(
+router.post(
     "/",
     (req, res, next) => {
         const {product, amount} = req.body;
-        // add edit product in cart or add amount if already present
+        // add product amount in cart or add amount if already present
         db.query(
             `INSERT INTO cart (buyer_id, product_id, amount)
              VALUES (${db.escape(req.user_id)}, ${db.escape(product)}, ${db.escape(amount)})
              ON DUPLICATE KEY UPDATE amount = amount + ${db.escape(amount)};`,
+            (err, results, fields) => {
+                // db error
+                if (err) {
+                    return response.internalError(res, err);
+                }
+                // send response
+                return res.send();
+            }
+        );
+    }
+);
+
+router.put(
+    "/",
+    (req, res, next) => {
+        const {product, amount} = req.body;
+        // edit product amount in cart or set amount if already present
+        db.query(
+            `INSERT INTO cart (buyer_id, product_id, amount)
+             VALUES (${db.escape(req.user_id)}, ${db.escape(product)}, ${db.escape(amount)})
+             ON DUPLICATE KEY UPDATE amount = ${db.escape(amount)};`,
             (err, results, fields) => {
                 // db error
                 if (err) {

@@ -2,7 +2,7 @@
 @import "node_modules/bootstrap/scss/variables";
 @import "node_modules/bootstrap/scss/mixins";
 
-.dark {
+body[data-theme="dark"] {
   $enable-gradients: true;
 
   /* redefine theme colors for dark theme */

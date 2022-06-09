@@ -3,12 +3,12 @@ import Notifications from "./Notifications";
 import LoggedBuyer from "./LoggedBuyer";
 import LoggedSeller from "./LoggedSeller";
 import AuthService from "../../services/AuthService";
+import {avatars_url} from "../../services/ApiUrls";
 
 function Logged(props) {
     const navigate = useNavigate();
 
     function handleLogout(e) {
-        AuthService.logout();
         props.logout();
         navigate("/");
     }
@@ -21,7 +21,7 @@ function Logged(props) {
             <div className="dropdown text-end ps-1">
                 <span className="d-block link-secondary text-decoration-none dropdown-toggle"
                       style={{cursor: "pointer"}} id="dropdown-user" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" className="rounded-circle"/>
+                    <img src={avatars_url + AuthService.user.avatar} alt="mdo" width="32" height="32" className="rounded-circle"/>
                     <span className="px-1">{AuthService.user.username}</span>
                 </span>
                 <ul className="dropdown-menu text-small" aria-labelledby="dropdown-user">

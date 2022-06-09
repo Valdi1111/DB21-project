@@ -7,6 +7,8 @@ router.get(
     "/",
     (req, res, next) => {
         const {category, max_price, min_price, search} = req.query;
+        const limit = req.query.limit ? req.query.limit : 12;
+        const offset = req.query.offset ? req.query.offset : 0;
         let query = `SELECT DISTINCT p.id,
                                      p.title,
                                      p.description,
@@ -31,7 +33,7 @@ router.get(
         if (search) {
             query += ` AND p.title LIKE ${db.escape("%" + search + "%")}`;
         }
-        query += `;`;
+        query += ` LIMIT ${limit} OFFSET ${offset};`;
         db.query(
             query,
             (err, results, fields) => {
@@ -109,15 +111,16 @@ router.get(
     "/:id/faqs",
     (req, res, next) => {
         const {id} = req.params;
+        let query = `SELECT q.id, q.question, q.answer, q.created, SUM(IFNULL(up.vote, 0)) AS upvotes
+                     FROM product_has_faq q
+                              LEFT JOIN product_faq_upvote up ON q.id = up.faq_id
+                     WHERE q.product_id = ${db.escape(id)}
+                       AND q.answer IS NOT NULL
+                     GROUP BY q.id
+                     ORDER BY upvotes DESC;`;
         // search faqs
         db.query(
-            `SELECT q.id, q.question, q.answer, q.created, SUM(IFNULL(up.vote, 0)) AS upvotes
-             FROM product_has_faq q
-                      LEFT JOIN product_faq_upvote up ON q.id = up.faq_id
-             WHERE q.product_id = ${db.escape(id)}
-               AND q.answer IS NOT NULL
-             GROUP BY q.id
-             ORDER BY upvotes DESC;`,
+            query,
             (err, results, fields) => {
                 // db error
                 if (err) {

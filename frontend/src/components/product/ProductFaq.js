@@ -41,7 +41,7 @@ function ProductFaq(props) {
             .post(
                 `${api_buyer_url}faqs/${props.faq.id}/upvote`,
                 {vote: value},
-                {headers: props.auth.authHeader()}
+                {headers: AuthService.authHeader()}
             )
             .then(
                 res => {

@@ -6,7 +6,7 @@ const response = require("../../methods/response");
 router.get(
     "/",
     (req, res, next) => {
-        // search settings data
+        // search seller data
         db.query(
             `SELECT *
              FROM user u
@@ -19,6 +19,27 @@ router.get(
                 }
                 // send response
                 return res.json(result[0]);
+            }
+        );
+    }
+);
+
+router.put(
+    "/",
+    (req, res, next) => {
+        // edit seller data
+        db.query(
+            `UPDATE seller s
+             SET s.name = ${db.escape(req.body.name)},
+                 s.vat  = ${db.escape(req.body.vat)}
+             WHERE s.id = ${db.escape(req.user_id)};`,
+            (err, result, fields) => {
+                // db error
+                if (err) {
+                    return response.internalError(res, err);
+                }
+                // send response
+                return res.send();
             }
         );
     }

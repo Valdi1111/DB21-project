@@ -1,10 +1,10 @@
-import {useLocation} from "react-router";
-import {Navigate, Route} from "react-router-dom";
+import {Navigate, useLocation} from "react-router-dom";
+import AuthService from "./AuthService";
 
 function RequireAuth(props) {
     let location = useLocation();
 
-    if (props.auth.isLoggedIn()) {
+    if (AuthService.isLoggedIn()) {
         return props.children;
     } else {
         return <Navigate to="/login" state={{from: location}} replace/>

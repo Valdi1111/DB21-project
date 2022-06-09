@@ -12,7 +12,8 @@ router.get(
              FROM notification n
                       INNER JOIN user_has_notification uhn on n.id = uhn.notification_id
              WHERE uhn.user_id = ${db.escape(req.user_id)}
-               AND uhn.read = 0;`,
+               AND uhn.read = 0
+             ORDER BY n.created DESC;`,
             (err, results, fields) => {
                 // db error
                 if (err) {
@@ -26,14 +27,16 @@ router.get(
 );
 
 router.get(
-    "/all",
+    "/history",
     (req, res, next) => {
         // get all notifications
         db.query(
             `SELECT n.id, n.title, n.description, n.link, n.created, uhn.read
              FROM notification n
                       INNER JOIN user_has_notification uhn on n.id = uhn.notification_id
-             WHERE uhn.user_id = ${db.escape(req.user_id)};`,
+             WHERE uhn.user_id = ${db.escape(req.user_id)}
+               AND uhn.read = 1
+             ORDER BY n.created DESC;`,
             (err, results, fields) => {
                 // db error
                 if (err) {
