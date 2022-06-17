@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
 import $ from "jquery";
 import axios from "axios";
-import AuthService from "../../../services/AuthService";
-import {api_buyer_url} from "../../../services/ApiUrls";
+import AuthService from "../../../../services/AuthService";
+import {api_buyer_url} from "../../../../services/ApiUrls";
 import AddAddress from "./AddAddress";
 import Address from "./Address";
 
@@ -15,6 +15,10 @@ function SettingsAddresses() {
     }, []);
 
     useEffect(() => {
+        refreshAddresses();
+    }, []);
+
+    function refreshAddresses() {
         axios
             .get(
                 `${api_buyer_url}shipments`,
@@ -25,19 +29,11 @@ function SettingsAddresses() {
                     setAddresses(res.data);
                 }
             );
-    }, []);
-
-    function addAddress(data) {
-        setAddresses([...addresses, data]);
-    }
-
-    function deleteAddress(id) {
-        setAddresses(addresses.filter(e => e.id !== id));
     }
 
     return (
         <>
-            {addresses.map(a => <Address key={a.id} address={a} delete={deleteAddress}/>)}
+            {addresses.map(a => <Address key={a.id} address={a} refresh={refreshAddresses}/>)}
             <div className="row mx-0">
                 <div className="col-12">
                     <hr/>
@@ -46,8 +42,8 @@ function SettingsAddresses() {
                         shipment address
                     </button>
                 </div>
-                <div id="shipment-add" className="col-12 px-0 collapse">
-                    <AddAddress add={addAddress}/>
+                <div className="col-12 px-0">
+                    <AddAddress refresh={refreshAddresses}/>
                 </div>
             </div>
         </>

@@ -60,18 +60,18 @@ function SettingsProfile() {
         <>
             <ProfileAvatar/>
             <form className="row mx-0 mt-3" onSubmit={handleSubmit} noValidate={true}>
-                <h4 className="col-12 mb-3 text-center">Change data</h4>
+                <h4 className="mb-3 text-center">Change data</h4>
                 <div className="col-6">
                     <div className="input-group mb-2">
-                        <label className="input-group-text" htmlFor="name_data">Name</label>
-                        <input type="text" id="name_data" className="form-control" ref={name} required/>
+                        <label className="input-group-text">Name</label>
+                        <input type="text" className="form-control" ref={name} required={true}/>
                         <div className="invalid-feedback">Please insert a valid business name.</div>
                     </div>
                 </div>
                 <div className="col-6">
                     <div className="input-group mb-2">
-                        <label className="input-group-text" htmlFor="vat_data">Vat</label>
-                        <input type="text" id="vat_data" className="form-control" ref={vat} required/>
+                        <label className="input-group-text">Vat</label>
+                        <input type="text" className="form-control" ref={vat} required={true}/>
                         <div className="invalid-feedback">Please insert a valid vat.</div>
                     </div>
                 </div>

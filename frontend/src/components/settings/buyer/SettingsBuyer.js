@@ -3,7 +3,8 @@ import SettingsTemplate from "../SettingsTemplate";
 import SettingsProfile from "./SettingsProfile";
 import SettingsNotifications from "../SettingsNotifications";
 import SettingsPayments from "./SettingsPayments";
-import SettingsAddresses from "../addresses/SettingsAddresses";
+import SettingsAddresses from "./addresses/SettingsAddresses";
+import ErrorPage from "../../ErrorPage";
 
 function SettingsBuyer() {
     const nav = [
@@ -20,6 +21,7 @@ function SettingsBuyer() {
                <Route path="notifications" element={<SettingsNotifications/>}/>
                <Route path="payments" element={<SettingsPayments/>}/>
                <Route path="addresses" element={<SettingsAddresses/>}/>
+               <Route path="*" element={<ErrorPage title="Page not found" name="Home" link="/"/>}/>
            </Routes>
        </SettingsTemplate>
     );

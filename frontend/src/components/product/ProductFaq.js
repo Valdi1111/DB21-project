@@ -9,7 +9,7 @@ import AuthService from "../../services/AuthService";
 function ProductFaq(props) {
     const [upvote, setUpvote] = useState(0);
     useEffect(() => {
-        if (!AuthService.isLoggedIn()) {
+        if (!AuthService.isBuyer()) {
             return;
         }
         axios
@@ -71,7 +71,7 @@ function ProductFaq(props) {
 
     return (
         <div className="row mx-0 mb-3">
-            <div className="col-auto text-center border-end px-3">
+            <div className="col-auto text-center border-end ps-0">
                 <FontAwesomeIcon icon={faChevronUp} onClick={handleUpVote} style={cssUpvote(1)}/>
                 <p className="mb-0">{props.faq.upvotes}</p>
                 <p className="mb-0">votes</p>

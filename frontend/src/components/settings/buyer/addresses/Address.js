@@ -1,6 +1,6 @@
 import axios from "axios";
-import {api_buyer_url} from "../../../services/ApiUrls";
-import AuthService from "../../../services/AuthService";
+import {api_buyer_url} from "../../../../services/ApiUrls";
+import AuthService from "../../../../services/AuthService";
 import {toast} from "wc-toast";
 
 function Address(props) {
@@ -14,7 +14,7 @@ function Address(props) {
             .then(
                 res => {
                     toast.success("AddAddress deleted successfully!");
-                    props.delete(props.address.id);
+                    props.refresh();
                 },
                 err => {
                     toast.error("An error occurred...");
@@ -27,41 +27,38 @@ function Address(props) {
             <h4 className="col-12 mb-3">{props.address.name}</h4>
             <div className="col-6">
                 <div className="input-group mb-2">
-                    <label className="input-group-text" htmlFor="street_data">Street</label>
-                    <input type="text" id="street_data" className="form-control" defaultValue={props.address.street}
-                           disabled/>
+                    <label className="input-group-text">Street</label>
+                    <input type="text" className="form-control" defaultValue={props.address.street} disabled={true}/>
                     <div className="invalid-feedback">Please insert a valid street.</div>
                 </div>
             </div>
             <div className="col-3">
                 <div className="input-group mb-2">
-                    <label className="input-group-text" htmlFor="civic_data">Civic</label>
-                    <input type="text" id="civic_data" className="form-control"
-                           defaultValue={props.address.civic_number} disabled/>
+                    <label className="input-group-text">Civic</label>
+                    <input type="text" className="form-control"
+                           defaultValue={props.address.civic_number} disabled={true}/>
                     <div className="invalid-feedback">Please insert a valid civic number.</div>
                 </div>
             </div>
             <div className="col-3">
                 <div className="input-group mb-2">
-                    <label className="input-group-text" htmlFor="code_data">Code</label>
-                    <input type="text" id="code_data" className="form-control"
-                           defaultValue={props.address.postal_code} disabled/>
+                    <label className="input-group-text">Code</label>
+                    <input type="text" className="form-control"
+                           defaultValue={props.address.postal_code} disabled={true}/>
                     <div className="invalid-feedback">Please insert a valid postal code.</div>
                 </div>
             </div>
             <div className="col-6">
                 <div className="input-group mb-2">
-                    <label className="input-group-text" htmlFor="city_data">City</label>
-                    <input type="text" id="city_data" className="form-control" defaultValue={props.address.city}
-                           disabled/>
+                    <label className="input-group-text">City</label>
+                    <input type="text" className="form-control" defaultValue={props.address.city} disabled={true}/>
                     <div className="invalid-feedback">Please insert a valid city.</div>
                 </div>
             </div>
             <div className="col-6">
                 <div className="input-group mb-2">
-                    <label className="input-group-text" htmlFor="district_data">District</label>
-                    <input type="text" id="district_data" className="form-control"
-                           defaultValue={props.address.district} disabled/>
+                    <label className="input-group-text">District</label>
+                    <input type="text" className="form-control" defaultValue={props.address.district} disabled={true}/>
                     <div className="invalid-feedback">Please insert a valid district.</div>
                 </div>
             </div>

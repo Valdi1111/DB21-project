@@ -8,7 +8,7 @@ import AuthService from "../../services/AuthService";
 function ProductReview(props) {
     const [helpful, setHelpful] = useState(0);
     useEffect(() => {
-        if (!AuthService.isLoggedIn()) {
+        if (!AuthService.isBuyer()) {
             return;
         }
         axios
@@ -78,7 +78,7 @@ function ProductReview(props) {
 
     const image = "https://64.media.tumblr.com/8a85be3e602bae04d5e99d3dc64381e9/bdfe9fb06e1bb455-b4/s540x810/9ea94857dc5e85e567d95bc516c864cf5bdba0ea.jpg";
     return (
-        <div className="mb-4">
+        <div className="mb-3">
             <div className="d-flex flex-start align-items-center">
                 <img className="rounded-circle shadow-1-strong me-3"
                      src={/*avatars_url + props.review.avatars*/image} alt="avatar" width="50" height="50"/>

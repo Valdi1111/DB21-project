@@ -81,12 +81,12 @@ function Product() {
     }
 
     return (
-        <main className="px-3">
-            <div className="row mx-0 mt-3">
-                <div className="col-12 col-sm-9 col-md-7 col-lg-4 px-0 mx-auto">
-                    <ProductImage images={images} />
+        <main>
+            <div className="row mx-0 my-3">
+                <div className="col-12 col-sm-9 col-md-7 col-lg-4 mx-auto">
+                    <ProductImage images={images}/>
                 </div>
-                <div className="col-12 col-lg-8 px-0 mt-3 ps-lg-3 pe-lg-0 mt-lg-0">
+                <div className="col-12 col-lg-8 mt-3 mt-lg-0">
                     <h3 className="mb-0">{product.title}</h3>
                     <Link className="text-muted"
                           to={"/seller/" + product.seller_id}>{"Visit the " + product.business_name + " store"}</Link>
@@ -94,13 +94,14 @@ function Product() {
                     <span className="btn btn-primary">{product.price?.toFixed(2) + " €"}</span>
                 </div>
             </div>
-            <div className="border-top mt-3">
+            <div className="row mx-0 border-top">
                 <div className="d-flex flex-start align-items-center">
                     <h4 className="col-auto my-3">Customer questions & answers</h4>
                     {
                         AuthService.isBuyer()
                             ?
-                            <button className="btn btn-outline-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse"
+                            <button className="btn btn-outline-secondary btn-sm ms-2" type="button"
+                                    data-bs-toggle="collapse"
                                     data-bs-target="#faq-add" aria-expanded="false" aria-controls="faq-add">
                                 Ask question
                             </button>
@@ -110,42 +111,41 @@ function Product() {
                 </div>
                 <div className="row mx-0">
                     <div className="col col-lg-9 px-0">
-                        <ProductFaqAdd product={product.id} />
+                        <ProductFaqAdd product={product.id}/>
                         {faq?.map(faq => <ProductFaq key={faq.id} faq={faq}/>)}
                     </div>
                 </div>
             </div>
-            <div className="border-top mt-3">
-                <div className="row mx-0">
-                    <div className="col-12 col-lg-3 px-0">
-                        <h4 className="my-3">Ratings</h4>
-                        {ratings ? <ProductRating amount={ratings.amount} average={ratings.average}
-                                                  ratings={ratings.ratings}/> : <></>}
-                    </div>
-                    <div className="col-12 col-lg-9 px-0">
-                        <div className="d-flex flex-start align-items-center">
-                            <h4 className="col-auto my-3">Customer reviews</h4>
-                            <div className="ms-3">
-                                <select className="form-select form-select-sm" defaultValue="helpful"
-                                        onChange={handleReviewsOrderChange}>
-                                    <option value="helpful">Top reviews</option>
-                                    <option value="date">Most recent</option>
-                                </select>
-                            </div>
-                            {
-                                AuthService.isBuyer()
-                                    ?
-                                    <button className="btn btn-outline-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#review-add" aria-expanded="false" aria-controls="review-add">
-                                        Add review
-                                    </button>
-                                    :
-                                    <></>
-                            }
+            <div className="row mx-0 border-top">
+                <div className="col-12 col-lg-3">
+                    <h4 className="my-3">Ratings</h4>
+                    {ratings ? <ProductRating amount={ratings.amount} average={ratings.average}
+                                              ratings={ratings.ratings}/> : <></>}
+                </div>
+                <div className="col-12 col-lg-9">
+                    <div className="d-flex flex-start align-items-center">
+                        <h4 className="col-auto my-3">Customer reviews</h4>
+                        <div className="ms-3">
+                            <select className="form-select form-select-sm" defaultValue="helpful"
+                                    onChange={handleReviewsOrderChange}>
+                                <option value="helpful">Top reviews</option>
+                                <option value="date">Most recent</option>
+                            </select>
                         </div>
-                        <ProductReviewAdd product={product.id} />
-                        {reviews?.map(review => <ProductReview key={review.id} review={review}/>)}
+                        {
+                            AuthService.isBuyer()
+                                ?
+                                <button className="btn btn-outline-secondary btn-sm ms-2" type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#review-add" aria-expanded="false" aria-controls="review-add">
+                                    Add review
+                                </button>
+                                :
+                                <></>
+                        }
                     </div>
+                    <ProductReviewAdd product={product.id}/>
+                    {reviews?.map(review => <ProductReview key={review.id} review={review}/>)}
                 </div>
             </div>
         </main>

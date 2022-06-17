@@ -32,7 +32,7 @@ router.post(
                         if (!bResult) {
                             return response.unauthorized(res, "wrong_password", "Email or password is incorrect!");
                         }
-                        const token = jwt.sign({id: result[0].id}, process.env.SECRET, {expiresIn: "1h"});
+                        const token = jwt.sign({id: result[0].id}, process.env.SECRET, {expiresIn: "30d"});
                         db.query(`UPDATE user SET last_login = now() WHERE id = ${result[0].id}`);
                         return res.json({
                             token,

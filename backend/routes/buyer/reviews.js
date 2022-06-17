@@ -10,27 +10,51 @@ router.post(
     multer({dest: "./uploads/reviews/"}).single("image"),
     (req, res, next) => {
         const {title, description, rating, product} = req.body;
-        const image = req.file.filename;
-        const ext = path.extname(req.file.originalname).toLowerCase();
-        if (!(ext === ".png" || ext === ".jpg" || ext === ".jpeg")) {
-            return response.badRequest(res, "invalid_image", "The image provided is invalid!");
+        if(req.file) {
+            return handleWithImage(req, res, next, title, description, rating, product);
         }
-        // add review to a product
-        db.query(
-            `INSERT INTO product_has_review (title, description, image, rating, product_id, reviewer_id)
-             VALUES (${db.escape(title)}, ${db.escape(description)}, ${db.escape(image)}, ${db.escape(rating)},
-                     ${db.escape(product)}, ${db.escape(req.user_id)});`,
-            (err, results, fields) => {
-                // db error
-                if (err) {
-                    return response.internalError(res, err);
-                }
-                // send response
-                return res.send();
-            }
-        );
+        return handleWithoutImage(req, res, next, title, description, rating, product);
     }
 );
+
+function handleWithoutImage(req, res, next, title, description, rating, product) {
+    // add review to a product
+    db.query(
+        `INSERT INTO product_has_review (title, description, rating, product_id, reviewer_id)
+         VALUES (${db.escape(title)}, ${db.escape(description)}, ${db.escape(rating)}, ${db.escape(product)},
+                 ${db.escape(req.user_id)});`,
+        (err, results, fields) => {
+            // db error
+            if (err) {
+                return response.internalError(res, err);
+            }
+            // send response
+            return res.send();
+        }
+    );
+}
+
+function handleWithImage(req, res, next, title, description, rating, product) {
+    const image = req.file.filename;
+    const ext = path.extname(req.file.originalname).toLowerCase();
+    if (!(ext === ".png" || ext === ".jpg" || ext === ".jpeg")) {
+        return response.badRequest(res, "invalid_image", "The image provided is invalid!");
+    }
+    // add review to a product
+    db.query(
+        `INSERT INTO product_has_review (title, description, image, rating, product_id, reviewer_id)
+         VALUES (${db.escape(title)}, ${db.escape(description)}, ${db.escape(image)}, ${db.escape(rating)},
+                 ${db.escape(product)}, ${db.escape(req.user_id)});`,
+        (err, results, fields) => {
+            // db error
+            if (err) {
+                return response.internalError(res, err);
+            }
+            // send response
+            return res.send();
+        }
+    );
+}
 
 router.get(
     "/:id/helpful",

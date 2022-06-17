@@ -63,7 +63,7 @@ function ProfileAddress(props) {
 
     return (
         <form className="row mx-0 mt-3" onSubmit={handleSubmit} noValidate={true}>
-            <h4 className="col-12 mb-3 text-center">Change address</h4>
+            <h4 className="mb-3 text-center">Change address</h4>
             <div className="col-6">
                 <div className="input-group mb-2">
                     <label className="input-group-text" htmlFor="street_data">Street</label>

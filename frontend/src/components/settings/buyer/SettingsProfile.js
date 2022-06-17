@@ -66,34 +66,32 @@ function SettingsProfile() {
         <>
             <ProfileAvatar />
             <form className="row mx-0 mt-3" onSubmit={handleSubmit} noValidate={true}>
-                <h4 className="col-12 mb-3 text-center">Change data</h4>
+                <h4 className="mb-3 text-center">Change data</h4>
                 <div className="col-6">
                     <div className="input-group mb-2">
-                        <label className="input-group-text" htmlFor="name_data">Name</label>
-                        <input type="text" id="name_data" className="form-control" ref={name} required/>
+                        <label className="input-group-text">Name</label>
+                        <input type="text" className="form-control" ref={name} required={true}/>
                         <div className="invalid-feedback">Please insert a valid name.</div>
                     </div>
                 </div>
                 <div className="col-6">
                     <div className="input-group mb-2">
-                        <label className="input-group-text" htmlFor="surname_data">Surname</label>
-                        <input type="text" id="surname_data" className="form-control" ref={surname} required/>
+                        <label className="input-group-text">Surname</label>
+                        <input type="text" className="form-control" ref={surname} required={true}/>
                         <div className="invalid-feedback">Please insert a valid surname.</div>
                     </div>
                 </div>
                 <div className="col-8">
                     <div className="input-group mb-2">
-                        <label className="input-group-text" htmlFor="fiscal_code_data">Fiscal code</label>
-                        <input type="text" id="fiscal_code_data" className="form-control" ref={fiscalCode}
-                               required/>
+                        <label className="input-group-text">Fiscal code</label>
+                        <input type="text" className="form-control" ref={fiscalCode} required={true}/>
                         <div className="invalid-feedback">Please insert a valid fiscal code.</div>
                     </div>
                 </div>
                 <div className="col-4">
                     <div className="input-group mb-2">
-                        <label className="input-group-text" htmlFor="gender_data">Gender</label>
-                        <select id="gender_data" className="form-select" aria-label="Select gender" ref={gender}
-                                required>
+                        <label className="input-group-text">Gender</label>
+                        <select className="form-select" aria-label="Select gender" ref={gender} required={true}>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                             <option value="other">Other</option>

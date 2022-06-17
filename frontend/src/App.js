@@ -56,11 +56,13 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="login" element={<></>}/>
+                    <Route path="register" element={<></>}/>
                     <Route path="*" element={<Header logged={auth} logout={logout}/>}/>
                 </Routes>
                 <Routes>
                     <Route index element={<Home/>}/>
                     <Route path="login" element={<Login login={login}/>}/>
+                    <Route path="register" element={<Login login={login}/>}/>
                     <Route path="shop" element={<Shop/>}/>
                     <Route path="product/:id" element={<Product/>}/>
                     <Route path="settings/*" element={<RequireAuth><Settings/></RequireAuth>}/>
@@ -68,6 +70,7 @@ function App() {
                 </Routes>
                 <Routes>
                     <Route path="login" element={<></>}/>
+                    <Route path="register" element={<></>}/>
                     <Route path="*" element={<Footer/>}/>
                 </Routes>
             </BrowserRouter>

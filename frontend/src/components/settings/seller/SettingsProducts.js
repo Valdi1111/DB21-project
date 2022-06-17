@@ -33,6 +33,11 @@ function SettingsProducts() {
     const [page, setPage] = useState(0);
     const [search, setSearch] = useState(null);
 
+    useEffect(() => {
+        $(".menu").removeClass("active");
+        $("#products").addClass("active");
+    }, []);
+
     const [products, setProducts] = useState([]);
     useEffect(() => {
         let params = {limit: productsPerPage, offset: productsPerPage * page};
@@ -49,15 +54,22 @@ function SettingsProducts() {
             );
     }, [page, search]);
 
-    useEffect(() => {
-        $(".menu").removeClass("active");
-        $("#products").addClass("active");
-    }, []);
+    function handleNext(e) {
+        setPage(page + 1);
+        $(window).scrollTop(0);
+    }
 
     return (
-        <div className="row mx-0">
-            {products.map(p => <Product key={p.id} product={p}/>)}
-        </div>
+        <>
+            <div className="row mx-0">
+                {products.map(p => <Product key={p.id} product={p}/>)}
+            </div>
+            <div className="row mx-0">
+                <div className="col-12">
+                    <button className="form-control btn btn-primary" onClick={handleNext}>Next</button>
+                </div>
+            </div>
+        </>
     );
 
 }

@@ -14,7 +14,7 @@ function ShopProduct(props) {
 
     const image = "https://64.media.tumblr.com/8a85be3e602bae04d5e99d3dc64381e9/bdfe9fb06e1bb455-b4/s540x810/9ea94857dc5e85e567d95bc516c864cf5bdba0ea.jpg";
     return (
-        <div className="p-2 col-4">
+        <div className="col-4 mb-3">
             <div onClick={handleClick} className="card product">
                 <img src={/*product_images_url + props.product.cover*/ image} className="card-img-top" alt="..."/>
                 <div className="card-body">
@@ -61,7 +61,7 @@ function Shop() {
         axios
             .get(
                 `${api_url}products`,
-                {params}
+                {params: params}
             )
             .then(
                 res => setProducts(res.data)
@@ -105,9 +105,9 @@ function Shop() {
 
     return (
         <main className="mx-0 py-3 row">
-            <aside className="px-3 col-3 border-end">
+            <aside className="col-3 border-end">
                 {/* SOTTO navbar navbar-light */}
-                <nav className="card rounded flex-column align-items-stretch py-0 mt-2">
+                <nav className="card rounded flex-column align-items-stretch py-0">
                     <h5 className="card-header p-3">Categories</h5>
                     <nav className="card-body nav nav-pills flex-column">
                         {/*
@@ -149,12 +149,14 @@ function Shop() {
                     </div>
                 </div>
             </aside>
-            <div id="products-view" className="px-3 col-9">
+            <div id="products-view" className="px-0 col-9">
                 <div className="row mx-0">
                     {products?.map(p => <ShopProduct key={p.id} product={p}/>)}
                 </div>
-                <div className="text-end pt-3">
-                    <button className="form-control btn btn-primary" onClick={handleNext}>Next</button>
+                <div className="row mx-0">
+                    <div className="col-12">
+                        <button className="form-control btn btn-primary" onClick={handleNext}>Next</button>
+                    </div>
                 </div>
             </div>
         </main>
