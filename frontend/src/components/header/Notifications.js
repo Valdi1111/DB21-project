@@ -15,14 +15,7 @@ function Notifications() {
                 `${api_user_url}notifications`,
                 {headers: AuthService.authHeader()}
             )
-            .then(
-                res => {
-                    setNotifications(res.data);
-                },
-                err => {
-                    //
-                }
-            )
+            .then(res => setNotifications(res.data))
     }, []);
 
     function readNotification(id) {

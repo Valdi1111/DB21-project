@@ -23,14 +23,10 @@ function ProfileAvatar() {
             )
             .then(
                 res => {
-                    if (res.status === 200) {
-                        toast.success("Avatar changed successfully!");
-                        done();
-                    }
+                    toast.success("Avatar changed successfully!");
+                    done();
                 },
-                err => {
-                    toast.error("An error occurred...");
-                }
+                err => toast.error("An error occurred...")
             );
     }
 

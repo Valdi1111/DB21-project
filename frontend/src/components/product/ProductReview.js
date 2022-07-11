@@ -8,80 +8,59 @@ import AuthService from "../../services/AuthService";
 function ProductReview(props) {
     const [helpful, setHelpful] = useState(0);
     useEffect(() => {
+        const tx = document.getElementsByClassName("review-description");
+        for (let i = 0; i < tx.length; i++) {
+            tx[i].style.height = (tx[i].scrollHeight + 2) + "px";
+        }
         if (!AuthService.isBuyer()) {
             return;
         }
         axios
             .get(
-                `${api_buyer_url}reviews/${props.review.id}/helpful`,
+                `${api_buyer_url}products/reviews/${props.review.id}/helpful`,
                 {headers: AuthService.authHeader()}
             )
-            .then(
-                res => {
-                    if (res.status === 200) {
-                        setHelpful(res.data.helpful);
-                    }
-                },
-                err => {
-                    // do nothing
-                }
-            );
-    }, []);
-
-    useEffect(() => {
-        const tx = document.getElementsByClassName("review-description");
-        for (let i = 0; i < tx.length; i++) {
-            tx[i].style.height = (tx[i].scrollHeight + 2) + "px";
-        }
+            .then(res => setHelpful(res.data.helpful));
     }, []);
 
     function handleHelpful(e) {
+        if (!AuthService.isBuyer()) {
+            toast.error("You are not a buyer!");
+            return;
+        }
         axios
             .post(
-                `${api_buyer_url}reviews/${props.review.id}/helpful`,
+                `${api_buyer_url}products/reviews/${props.review.id}/helpful`,
                 {},
                 {headers: AuthService.authHeader()}
             )
             .then(
-                res => {
-                    if (res.status === 200) {
-                        setHelpful(1);
-                    }
-                },
-                err => {
-                    if (err.response.status === 403) {
-                        toast.error("You are not a buyer!");
-                    }
-                }
+                res => setHelpful(1),
+                err => toast.error("An error occurred...")
             );
     }
 
     function handleUndo(e) {
+        if (!AuthService.isBuyer()) {
+            toast.error("You are not a buyer!");
+            return;
+        }
         axios
             .delete(
-                `${api_buyer_url}reviews/${props.review.id}/helpful`,
+                `${api_buyer_url}products/reviews/${props.review.id}/helpful`,
                 {headers: AuthService.authHeader()}
             )
             .then(
-                res => {
-                    if (res.status === 200) {
-                        setHelpful(0);
-                    }
-                },
-                err => {
-                    if (err.response.status === 403) {
-                        toast.error("You are not a buyer!");
-                    }
-                }
+                res => setHelpful(0),
+                err => toast.error("An error occurred...")
             );
     }
 
-    const image = "https://64.media.tumblr.com/8a85be3e602bae04d5e99d3dc64381e9/bdfe9fb06e1bb455-b4/s540x810/9ea94857dc5e85e567d95bc516c864cf5bdba0ea.jpg";
     return (
         <div className="mb-3">
             <div className="d-flex flex-start align-items-center">
                 <img className="rounded-circle shadow-1-strong me-3"
-                     src={/*avatars_url + props.review.avatars*/image} alt="avatar" width="50" height="50"/>
+                     src={avatars_url + props.review.avatar} alt="avatar" width="50" height="50"/>
                 <div>
                     <h6 className="fw-bold text-primary mb-1">{props.review.username}</h6>
                     <p className="text-muted small mb-0">{"Shared publicly on " + props.review.created}</p>

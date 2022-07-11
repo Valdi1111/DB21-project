@@ -16,10 +16,8 @@ function Address(props) {
                     toast.success("AddAddress deleted successfully!");
                     props.refresh();
                 },
-                err => {
-                    toast.error("An error occurred...");
-                }
-            )
+                err => toast.error("An error occurred...")
+            );
     }
 
     return (

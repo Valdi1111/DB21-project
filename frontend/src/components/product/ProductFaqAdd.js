@@ -1,39 +1,34 @@
 import axios from "axios";
 import {api_buyer_url} from "../../services/ApiUrls";
 import {toast} from "wc-toast";
-import {createRef, useState} from "react";
+import {useRef} from "react";
 import AuthService from "../../services/AuthService";
 
 function ProductFaqAdd(props) {
-    const question = createRef();
+    const question = useRef();
 
     function handleSubmit(e) {
+        if (!AuthService.isBuyer()) {
+            toast.error("You are not a buyer!");
+            return;
+        }
         e.preventDefault();
         if (e.target.checkValidity()) { // use can also use e.target.reportValidity
             axios
                 .post(
-                    `${api_buyer_url}faqs`,
+                    `${api_buyer_url}products/${props.product}/faqs`,
                     {
-                        question: question.current.value,
-                        product: props.product
+                        question: question.current.value
                     },
                     {headers: AuthService.authHeader()}
                 )
                 .then(
                     res => {
-                        if (res.status === 200) {
-                            toast.success("Question sent successfully!");
-                            document.getElementById("faq-add").classList.remove("show");
-                            question.current.value = "";
-                        }
+                        toast.success("Question sent successfully!");
+                        document.getElementById("faq-add").classList.remove("show");
+                        question.current.value = "";
                     },
-                    err => {
-                        if (err.response.status === 403) {
-                            toast.error("You are not a buyer!");
-                        } else {
-                            toast.error("An error occurred...");
-                        }
-                    }
+                    err => toast.error("An error occurred...")
                 );
         } else {
             e.stopPropagation();

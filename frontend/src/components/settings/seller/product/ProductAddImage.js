@@ -23,16 +23,12 @@ function ProductAddImage(props) {
             )
             .then(
                 res => {
-                    if (res.status === 200) {
-                        toast.success("Image added successfully!");
-                        done();
-                        document.getElementById("image-add").classList.remove("show");
-                        props.refresh();
-                    }
+                    toast.success("Image added successfully!");
+                    done();
+                    document.getElementById("image-add").classList.remove("show");
+                    props.refresh();
                 },
-                err => {
-                    toast.error("An error occurred...");
-                }
+                err => toast.error("An error occurred...")
             );
     }
 

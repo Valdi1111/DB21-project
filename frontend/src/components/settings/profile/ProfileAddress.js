@@ -24,9 +24,6 @@ function ProfileAddress(props) {
                     postalCode.current.value = res.data.postal_code;
                     city.current.value = res.data.city;
                     district.current.value = res.data.district;
-                },
-                err => {
-
                 }
             );
     });

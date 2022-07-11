@@ -24,11 +24,7 @@ function SettingsAddresses() {
                 `${api_buyer_url}shipments`,
                 {headers: AuthService.authHeader()}
             )
-            .then(
-                res => {
-                    setAddresses(res.data);
-                }
-            );
+            .then(res => setAddresses(res.data));
     }
 
     return (

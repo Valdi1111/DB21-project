@@ -3,14 +3,18 @@ const router = express.Router();
 
 const profile = require("./buyer/profile");
 const shipments = require("./buyer/shipments");
+const payments = require("./buyer/payments");
 const cart = require("./buyer/cart");
-const reviews = require("./buyer/reviews");
-const faqs = require("./buyer/faqs");
+const checkout = require("./buyer/checkout");
+const orders = require("./buyer/orders");
+const products = require("./buyer/products");
 
 router.use("/profile", profile);
 router.use("/shipments", shipments);
+router.use("/payments", payments);
 router.use("/cart", cart);
-router.use("/reviews", reviews);
-router.use("/faqs", faqs);
+router.use("/checkout", checkout);
+router.use("/orders", orders);
+router.use("/products", products);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import {createRef, useState} from "react";
+import {useRef, useState} from "react";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import {toast} from "wc-toast";
@@ -7,8 +7,8 @@ import {faArrowRotateLeft, faArrowRotateRight} from "@fortawesome/free-solid-svg
 
 function ImageSelector(props) {
     const [imageSrc, setImageSrc] = useState("");
-    const input = createRef();
-    const cropper = createRef();
+    const input = useRef();
+    const cropper = useRef();
 
     function handleChange(e) {
         if (!e.target.files[0]) {

@@ -1,4 +1,4 @@
-export const url = "http://localhost:8080/";
+export const url = "https://store.valdi.ovh/";
 export const api_url = url + "api/";
 export const api_auth_url = api_url + "auth/";
 export const api_user_url = api_url + "user/";

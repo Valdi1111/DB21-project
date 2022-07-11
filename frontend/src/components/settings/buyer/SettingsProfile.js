@@ -49,12 +49,8 @@ function SettingsProfile() {
                     {headers: AuthService.authHeader()}
                 )
                 .then(
-                    res => {
-                        toast.success("Data changed successfully!");
-                    },
-                    err => {
-                        toast.error("An error occurred...");
-                    }
+                    res => toast.success("Data changed successfully!"),
+                    err => toast.error("An error occurred...")
                 );
         } else {
             e.stopPropagation();

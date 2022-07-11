@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import $ from "jquery";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
-import {api_seller_url} from "../../../services/ApiUrls";
+import {api_seller_url, product_images_url} from "../../../services/ApiUrls";
 import AuthService from "../../../services/AuthService";
 
 function Product(props) {
@@ -12,11 +12,10 @@ function Product(props) {
         navigate("../product/" + props.product.id);
     }
 
-    const image = "https://64.media.tumblr.com/8a85be3e602bae04d5e99d3dc64381e9/bdfe9fb06e1bb455-b4/s540x810/9ea94857dc5e85e567d95bc516c864cf5bdba0ea.jpg";
     return (
         <div className="col-4 mb-3">
             <div onClick={handleClick} className="card product">
-                <img src={/*product_images_url + props.product.cover*/ image} className="card-img-top" alt="..."/>
+                <img src={product_images_url + props.product.cover} className="card-img-top" alt="..."/>
                 <div className="card-body">
                     <h5 className="card-title text-break">{props.product.title}</h5>
                     <p className="card-text text-break">{props.product.description}</p>
@@ -49,9 +48,7 @@ function SettingsProducts() {
                 `${api_seller_url}products`,
                 {headers: AuthService.authHeader(), params: params}
             )
-            .then(
-                res => setProducts(res.data)
-            );
+            .then(res => setProducts(res.data));
     }, [page, search]);
 
     function handleNext(e) {

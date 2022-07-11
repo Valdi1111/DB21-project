@@ -9,51 +9,35 @@ import AuthService from "../../services/AuthService";
 function ProductFaq(props) {
     const [upvote, setUpvote] = useState(0);
     useEffect(() => {
+        const tx = document.getElementsByClassName("faq-answer");
+        for (let i = 0; i < tx.length; i++) {
+            tx[i].style.height = (tx[i].scrollHeight + 2) + "px";
+        }
         if (!AuthService.isBuyer()) {
             return;
         }
         axios
             .get(
-                `${api_buyer_url}faqs/${props.faq.id}/upvote`,
+                `${api_buyer_url}products/faqs/${props.faq.id}/upvote`,
                 {headers: AuthService.authHeader()}
             )
-            .then(
-                res => {
-                    if (res.status === 200) {
-                        setUpvote(res.data.upvote);
-                    }
-                },
-                err => {
-                    // do nothing
-                }
-            );
-    }, []);
-
-    useEffect(() => {
-        const tx = document.getElementsByClassName("faq-answer");
-        for (let i = 0; i < tx.length; i++) {
-            tx[i].style.height = (tx[i].scrollHeight + 2) + "px";
-        }
+            .then(res => setUpvote(res.data.upvote));
     }, []);
 
     function handleChange(value) {
+        if (!AuthService.isBuyer()) {
+            toast.error("You are not a buyer!");
+            return;
+        }
         axios
             .post(
-                `${api_buyer_url}faqs/${props.faq.id}/upvote`,
+                `${api_buyer_url}products/faqs/${props.faq.id}/upvote`,
                 {vote: value},
                 {headers: AuthService.authHeader()}
             )
             .then(
-                res => {
-                    if (res.status === 200) {
-                        setUpvote(value);
-                    }
-                },
-                err => {
-                    if (err.response.status === 403) {
-                        toast.error("You are not a buyer!");
-                    }
-                }
+                res => setUpvote(value),
+                err => toast.error("An error occurred...")
             );
     }
 

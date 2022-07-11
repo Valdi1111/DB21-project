@@ -1,30 +1,33 @@
 import axios from "axios";
 import {api_buyer_url} from "../../services/ApiUrls";
 import {toast} from "wc-toast";
-import {createRef, useState} from "react";
+import {useRef} from "react";
 import FormData from "form-data";
 import AuthService from "../../services/AuthService";
 
 function ProductReviewAdd(props) {
-    const title = createRef();
-    const description = createRef();
-    const rating = createRef();
-    const image = createRef();
+    const title = useRef();
+    const description = useRef();
+    const rating = useRef();
+    const image = useRef();
 
     function handleSubmit(e) {
+        if (!AuthService.isBuyer()) {
+            toast.error("You are not a buyer!");
+            return;
+        }
         e.preventDefault();
         if (e.target.checkValidity()) { // use can also use e.target.reportValidity
             let data = new FormData();
             data.append("title", title.current.value);
             data.append("description", description.current.value);
             data.append("rating", rating.current.value);
-            data.append("product", props.product);
             if (image.current.files[0]) {
                 data.append("image", image.current.files[0], image.current.files[0].name);
             }
             axios
                 .post(
-                    `${api_buyer_url}reviews`,
+                    `${api_buyer_url}products/${props.product}/reviews`,
                     data,
                     {
                         headers: {
@@ -35,22 +38,14 @@ function ProductReviewAdd(props) {
                 )
                 .then(
                     res => {
-                        if (res.status === 200) {
-                            toast.success("Review added successfully!");
-                            document.getElementById("review-add").classList.remove("show");
-                            title.current.value = "";
-                            description.current.value = "";
-                            rating.current.value = "";
-                            image.current.files[0] = null;
-                        }
+                        toast.success("Review added successfully!");
+                        document.getElementById("review-add").classList.remove("show");
+                        title.current.value = "";
+                        description.current.value = "";
+                        rating.current.value = "";
+                        image.current.files[0] = null;
                     },
-                    err => {
-                        if (err.response.status === 403) {
-                            toast.error("You are not a buyer!");
-                        } else {
-                            toast.error("An error occurred...");
-                        }
-                    }
+                    err => toast.error("An error occurred...")
                 );
         } else {
             e.stopPropagation();

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../models/db");
+const db = require("../services/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const response = require("../methods/response");
@@ -9,7 +9,9 @@ router.post(
     "/signin",
     (req, res, next) => {
         db.query(
-            `SELECT * FROM user WHERE email = ${db.escape(req.body.email)};`,
+            `SELECT *
+             FROM user
+             WHERE email = ${db.escape(req.body.email)};`,
             (err, result) => {
                 // db error
                 if (err) {
@@ -33,11 +35,14 @@ router.post(
                             return response.unauthorized(res, "wrong_password", "Email or password is incorrect!");
                         }
                         const token = jwt.sign({id: result[0].id}, process.env.SECRET, {expiresIn: "30d"});
-                        db.query(`UPDATE user SET last_login = now() WHERE id = ${result[0].id}`);
-                        return res.json({
+                        db.query(`UPDATE user
+                                  SET last_login = now()
+                                  WHERE id = ${result[0].id}`);
+                        /*return res.json({
                             token,
                             user: result[0]
-                        });
+                        });*/
+                        return res.json({id: result[0].id, type: result[0].type, token});
                     }
                 );
             }
@@ -49,7 +54,9 @@ router.post(
     "/signup",
     (req, res, next) => {
         db.query(
-            `SELECT * FROM user WHERE LOWER(email) = LOWER(${db.escape(req.body.email)});`,
+            `SELECT *
+             FROM user
+             WHERE LOWER(email) = LOWER(${db.escape(req.body.email)});`,
             (err, result) => {
                 // db error
                 if (err) {
@@ -70,7 +77,8 @@ router.post(
                     }
                     // has hashed pw => add to database
                     db.query(
-                        `INSERT INTO user (name, email, password) VALUES ('${req.body.name}', ${db.escape(req.body.email)}, ${db.escape(hash)})`,
+                        `INSERT INTO user (name, email, password)
+                         VALUES ('${req.body.name}', ${db.escape(req.body.email)}, ${db.escape(hash)})`,
                         (err, result) => {
                             // db error
                             if (err) {

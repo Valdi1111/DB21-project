@@ -4,12 +4,13 @@ import axios from "axios";
 import {api_user_url} from "../../services/ApiUrls";
 import AuthService from "../../services/AuthService";
 import {Link} from "react-router-dom";
+import {getNotificationLink} from "../../services/Utils";
 
 function Notification(props) {
     return (
         <div className="card">
             <div className="card-body">
-                <Link to={props.notification.link}
+                <Link to={getNotificationLink(props.notification)}
                       className="h6 text-primary text-wrap text-break mt-1">{props.notification.title}</Link>
                 <p className="text-wrap text-break">{props.notification.description}</p>
                 <div className="d-flex flex-row justify-content-end" style={{fontSize: "85%"}}>
@@ -28,14 +29,7 @@ function SettingsNotifications() {
                 `${api_user_url}notifications/history`,
                 {headers: AuthService.authHeader()}
             )
-            .then(
-                res => {
-                    setNotifications(res.data);
-                },
-                err => {
-                    //
-                }
-            )
+            .then(res => setNotifications(res.data))
     }, []);
 
     useEffect(() => {

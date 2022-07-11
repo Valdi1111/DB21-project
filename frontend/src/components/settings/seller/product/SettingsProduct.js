@@ -1,9 +1,9 @@
-import {createRef, useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import $ from "jquery";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import AuthService from "../../../../services/AuthService";
-import {api_seller_url} from "../../../../services/ApiUrls";
+import {api_seller_url, api_url} from "../../../../services/ApiUrls";
 import {toast} from "wc-toast";
 import ProductImage from "./ProductImage";
 import ProductAddImage from "./ProductAddImage";
@@ -12,13 +12,13 @@ import ProductUnansweredFaq from "./ProductUnansweredFaq";
 function SettingsProduct() {
     const {id} = useParams();
 
-    const title = createRef();
-    const description = createRef();
-    const descriptionFull = createRef();
-    const price = createRef();
-    const discount = createRef();
-    const amount = createRef();
-    const visible = createRef();
+    const title = useRef();
+    const description = useRef();
+    const descriptionFull = useRef();
+    const price = useRef();
+    const discount = useRef();
+    const amount = useRef();
+    const visible = useRef();
 
     const [images, setImages] = useState([]);
     const [faq, setFaq] = useState([]);
@@ -52,13 +52,8 @@ function SettingsProduct() {
     // get images
     function refreshImages() {
         axios
-            .get(
-                `${api_seller_url}products/${id}/images`,
-                {headers: AuthService.authHeader()}
-            )
-            .then(
-                res => setImages(res.data)
-            );
+            .get(`${api_url}products/${id}/images`)
+            .then(res => setImages(res.data));
     }
 
     // get faqs
@@ -68,9 +63,7 @@ function SettingsProduct() {
                 `${api_seller_url}products/${id}/faqs`,
                 {headers: AuthService.authHeader()}
             )
-            .then(
-                res => setFaq(res.data)
-            );
+            .then(res => setFaq(res.data));
     }
 
     function handleDataChange(e) {
@@ -91,12 +84,8 @@ function SettingsProduct() {
                     {headers: AuthService.authHeader()}
                 )
                 .then(
-                    res => {
-                        toast.success("Product data changed successfully!");
-                    },
-                    err => {
-                        toast.error("An error occurred...");
-                    }
+                    res => toast.success("Product data changed successfully!"),
+                    err => toast.error("An error occurred...")
                 );
         } else {
             e.stopPropagation();

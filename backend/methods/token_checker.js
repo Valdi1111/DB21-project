@@ -1,4 +1,4 @@
-const db = require("../models/db");
+const db = require("../services/db");
 const jwt = require("jsonwebtoken");
 const response = require("./response");
 

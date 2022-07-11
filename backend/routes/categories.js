@@ -1,22 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../models/db");
-const response = require("../methods/response");
+const categories = require("../services/categories");
 
 router.get(
     "/",
-    (req, res, next) => {
-        db.query(
-            `SELECT *
-             FROM category;`,
-            (err, results, fields) => {
-                // db error
-                if (err) {
-                    return response.internalError(res, err);
-                }
-                return res.json(results);
-            }
-        );
+    async (req, res, next) => {
+        try {
+            return res.json(await categories.getAll());
+        } catch (err) {
+            console.error("Error on GET categories.");
+            next(err);
+        }
     }
 );
 

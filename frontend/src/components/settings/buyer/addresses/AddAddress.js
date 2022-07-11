@@ -41,9 +41,7 @@ function AddAddress(props) {
                         city.current.value = "";
                         district.current.value = "";
                     },
-                    err => {
-                        toast.error("An error occurred...");
-                    }
+                    err => toast.error("An error occurred...")
                 );
         } else {
             e.stopPropagation();

@@ -2,17 +2,17 @@ import axios from "axios";
 import {toast} from "wc-toast";
 import AuthService from "../../../../services/AuthService";
 import {api_seller_url} from "../../../../services/ApiUrls";
-import {createRef} from "react";
+import {useRef} from "react";
 
 function ProductUnansweredFaq(props) {
-    const answer = createRef();
+    const answer = useRef();
 
     function handleSubmit(e) {
         e.preventDefault();
         if (e.target.checkValidity()) { // use can also use e.target.reportValidity
             axios
                 .put(
-                    `${api_seller_url}faqs/${props.faq.id}`,
+                    `${api_seller_url}products/faqs/${props.faq.id}`,
                     {answer: answer.current.value},
                     {headers: AuthService.authHeader()}
                 )
@@ -21,9 +21,7 @@ function ProductUnansweredFaq(props) {
                         toast.success("Faq updated successfully!");
                         props.refresh();
                     },
-                    err => {
-                        toast.error("An error occurred...");
-                    }
+                    err => toast.error("An error occurred...")
                 );
         } else {
             e.stopPropagation();
@@ -34,7 +32,7 @@ function ProductUnansweredFaq(props) {
     function handleDelete(e) {
         axios
             .delete(
-                `${api_seller_url}faqs/${props.faq.id}`,
+                `${api_seller_url}products/faqs/${props.faq.id}`,
                 {headers: AuthService.authHeader()}
             )
             .then(
@@ -42,9 +40,7 @@ function ProductUnansweredFaq(props) {
                     toast.success("Faq deleted successfully!");
                     props.refresh();
                 },
-                err => {
-                    toast.error("An error occurred...");
-                }
+                err => toast.error("An error occurred...")
             );
     }
 

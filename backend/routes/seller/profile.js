@@ -1,47 +1,31 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../../models/db");
-const response = require("../../methods/response");
+const profile = require("../../services/profile");
 
 router.get(
     "/",
-    (req, res, next) => {
-        // search seller data
-        db.query(
-            `SELECT *
-             FROM user u
-                      INNER JOIN seller s ON u.id = s.id
-             WHERE u.id = ${db.escape(req.user_id)};`,
-            (err, result, fields) => {
-                // db error
-                if (err) {
-                    return response.internalError(res, err);
-                }
-                // send response
-                return res.json(result[0]);
-            }
-        );
+    async (req, res, next) => {
+        try {
+            const results = await profile.getSellerProfile(req.user_id);
+            return res.json(results[0]);
+        } catch (err) {
+            console.error("Error on GET seller/profile.");
+            next(err);
+        }
     }
 );
 
 router.put(
     "/",
-    (req, res, next) => {
-        // edit seller data
-        db.query(
-            `UPDATE seller s
-             SET s.name = ${db.escape(req.body.name)},
-                 s.vat  = ${db.escape(req.body.vat)}
-             WHERE s.id = ${db.escape(req.user_id)};`,
-            (err, result, fields) => {
-                // db error
-                if (err) {
-                    return response.internalError(res, err);
-                }
-                // send response
-                return res.send();
-            }
-        );
+    async (req, res, next) => {
+        try {
+            const {name, vat} = req.body;
+            await profile.editSellerProfile(req.user_id, name, vat);
+            return res.send();
+        } catch (err) {
+            console.error("Error on PUT seller/profile.");
+            next(err);
+        }
     }
 );
 

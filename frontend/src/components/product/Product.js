@@ -20,48 +20,23 @@ function Product() {
     const [reviews, setReviews] = useState([]);
     const [ratings, setRatings] = useState({});
 
-    // get product
     useEffect(() => {
+        // get product
         axios
-            .get(
-                `${api_url}products/${id}`
-            )
-            .then(
-                res => setProduct(res.data)
-            );
-    }, [id]);
-
-    // get images
-    useEffect(() => {
+            .get(`${api_url}products/${id}`)
+            .then(res => setProduct(res.data));
+        // get images
         axios
-            .get(
-                `${api_url}products/${id}/images`
-            )
-            .then(
-                res => setImages(res.data)
-            );
-    }, [id]);
-
-    // get faqs
-    useEffect(() => {
+            .get(`${api_url}products/${id}/images`)
+            .then(res => setImages(res.data));
+        // get faqs
         axios
-            .get(
-                `${api_url}products/${id}/faqs`
-            )
-            .then(
-                res => setFaq(res.data)
-            );
-    }, [id]);
-
-    // get ratings
-    useEffect(() => {
+            .get(`${api_url}products/${id}/faqs`)
+            .then(res => setFaq(res.data));
+        // get ratings
         axios
-            .get(
-                `${api_url}products/${id}/ratings`
-            )
-            .then(
-                res => setRatings(res.data)
-            );
+            .get(`${api_url}products/${id}/ratings`)
+            .then(res => setRatings(res.data));
     }, [id]);
 
     // get reviews
@@ -71,9 +46,7 @@ function Product() {
                 `${api_url}products/${id}/reviews`,
                 {params: {order_by: reviewsOrder}}
             )
-            .then(
-                res => setReviews(res.data)
-            );
+            .then(res => setReviews(res.data));
     }, [id, reviewsOrder]);
 
     function handleReviewsOrderChange(e) {
