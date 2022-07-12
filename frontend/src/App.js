@@ -1,20 +1,23 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import Home from './components/Home';
-import Login from './components/Login';
-import Shop from './components/Shop';
-import Header from "./components/header/Header";
-import Footer from "./components/Footer";
-import Product from "./components/product/Product";
-import Settings from "./components/settings/Settings";
-import RequireAuth from "./services/RequireAuth";
-import ErrorPage from "./components/ErrorPage";
 import AuthService from "./services/AuthService";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {api_user_url} from "./services/ApiUrls";
+import RequireAuth from "./services/RequireAuth";
+import ErrorPage from "./components/ErrorPage";
+import Home from "./components/Home";
+import Login from "./components/Login";
+import Shop from "./components/Shop";
+import Header from "./components/header/Header";
+import Footer from "./components/Footer";
+import Product from "./components/product/Product";
+import Settings from "./components/settings/Settings";
+import Order from "./components/order/Order";
+import Orders from "./components/Orders";
 
 function App() {
     AuthService.updateToken();
+    //const [token, setToken] = useState("");
     const [auth, setAuth] = useState(false);
     useEffect(() => {
         if (AuthService.isLoggedIn()) {
@@ -65,6 +68,8 @@ function App() {
                     <Route path="register" element={<Login login={login}/>}/>
                     <Route path="shop" element={<Shop/>}/>
                     <Route path="product/:id" element={<Product/>}/>
+                    <Route path="orders" element={<Orders/>}/>
+                    <Route path="order/:id" element={<Order/>}/>
                     <Route path="settings/*" element={<RequireAuth><Settings/></RequireAuth>}/>
                     <Route path="*" element={<ErrorPage title="Page not found" name="Home" link="/"/>}/>
                 </Routes>

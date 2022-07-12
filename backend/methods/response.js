@@ -24,9 +24,13 @@ exports.notFound = function (res, err, msg) {
     return error(res, 404, err, msg);
 }
 
-exports.internalError = function (res, err) {
-    console.error(err);
-    return error(res, 500, "internal_error", "Internal server error!");
+exports.conflict = function (res, err, msg) {
+    return error(res, 409, err, msg);
+}
+
+exports.internalError = function (res, msg) {
+    console.error(msg);
+    return error(res, 500, "internal_error", msg);
 }
 
 // 400 - bad request

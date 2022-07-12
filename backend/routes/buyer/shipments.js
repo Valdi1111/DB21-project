@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const shipments = require("../../services/shipments");
+const address = require("../../services/address");
+const response = require("../../methods/response");
 
 router.get(
     "/",
@@ -19,8 +21,13 @@ router.post(
     async (req, res, next) => {
         try {
             const {name, street, civic_number, postal_code, city, district} = req.body;
-            const [r1, r2] = await shipments.add(req.user_id, name, street, civic_number, postal_code, city, district)
-            return res.json({id: r1.insertId});
+            const addressRes = await address.add(street, civic_number, postal_code, city, district)
+            if (!addressRes.insertId) {
+                // error creating address
+                return response.internalError(res, "Error creating address!");
+            }
+            await shipments.add(req.user_id, name, addressRes.insertId)
+            return res.json({id: addressRes.insertId});
         } catch (err) {
             console.error("Error on POST buyer/shipments.");
             next(err);

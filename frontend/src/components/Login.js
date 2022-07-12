@@ -29,7 +29,7 @@ function Login(props) {
                 new Promise((resolve, reject) => {
                     axios
                         .post(
-                            `${api_auth_url}signin`,
+                            `${api_auth_url}login`,
                             {
                                 email: email,
                                 password: password

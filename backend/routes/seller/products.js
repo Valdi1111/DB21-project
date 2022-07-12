@@ -87,16 +87,18 @@ router.put(
     }
 );
 
-// TODO remove file from disk
 router.delete(
     "/images/:id",
     async (req, res, next) => {
         try {
             const {id} = req.params;
-            await products.removeImage(req.user_id, id);
-            // TODO remove file from disk
-            //const file = path.join(__dirname, "..", "..", "uploads", "products", results1[0].path);
-            //fs.unlinkSync(file);
+            const [r1, r2] = await products.removeImage(req.user_id, id);
+            // nothing found
+            if (!r1.length) {
+                return response.notFound(res, "image_not_found", "No image found with id " + id + "!");
+            }
+            const file = path.join(__dirname, "..", "..", "uploads", "products", r1[0].path);
+            fs.unlinkSync(file);
             return res.send();
         } catch (err) {
             console.error("Error on DELETE seller/products/images/:id.");

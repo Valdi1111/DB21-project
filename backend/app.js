@@ -14,7 +14,8 @@ app.use(express.urlencoded({ extended: false }));
 
 // Add routes
 app.use("/", index);
-app.use("/api", api);
+//app.use("/", express.static(__dirname + '/public'));
+app.use("/api/v1", api);
 app.use("/uploads", uploads);
 
 // Handling Errors

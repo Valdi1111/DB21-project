@@ -296,15 +296,24 @@ async function editImage(user_id, image_id, order) {
 }
 
 async function removeImage(user_id, image_id) {
-    const [results,] = await db.promise().query(
-        `DELETE i
+    const [results1,] = await db.promise().query(
+        `SELECT i.id, i.path
          FROM product_has_image i
                   INNER JOIN product p ON i.product_id = p.id
          WHERE p.seller_id = ?
            AND i.id = ?;`,
         [user_id, image_id]
     );
-    return results;
+    if (results1.length === 0) {
+        return [results1, null];
+    }
+    const [results2,] = await db.promise().query(
+        `DELETE
+         FROM product_has_image i
+         WHERE i.id = ?;`,
+        [results1[0].id]
+    );
+    return [results1, results2];
 }
 
 async function getUnansweredFaqs(user_id, product_id) {

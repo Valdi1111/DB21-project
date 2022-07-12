@@ -12,19 +12,13 @@ async function getAll(user_id) {
     return results;
 }
 
-async function add(user_id, name, street, civic_number, postal_code, city, district) {
-    const [results1,] = await db.promise().query(
-        `INSERT INTO address (street, civic_number, postal_code, city, district)
-         VALUES (?, ?, ?, ?, ?);`,
-        [street, civic_number, postal_code, city, district]
-    );
-    const id = results1.insertId;
-    const [results2,] = await db.promise().query(
+async function add(user_id, name, address_id) {
+    const [results,] = await db.promise().query(
         `INSERT INTO shipment (id, buyer_id, name)
          VALUES (?, ?, ?);`,
-        [id, user_id, name]
+        [address_id, user_id, name]
     );
-    return [results1, results2];
+    return results;
 }
 
 async function remove(user_id, shipment_id) {
