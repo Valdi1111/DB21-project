@@ -1,13 +1,12 @@
 import {useEffect, useRef} from "react";
 import axios from "axios";
 import {api_buyer_url} from "../../../services/ApiUrls";
-import AuthService from "../../../services/AuthService";
 import {toast} from "wc-toast";
 import ProfileAvatar from "../profile/ProfileAvatar";
 import ProfileAddress from "../profile/ProfileAddress";
 import $ from "jquery";
 
-function SettingsProfile() {
+function SettingsProfile(props) {
     const name = useRef();
     const surname = useRef();
     const fiscalCode = useRef();
@@ -22,7 +21,7 @@ function SettingsProfile() {
         axios
             .get(
                 `${api_buyer_url}profile`,
-                {headers: AuthService.authHeader()}
+                {headers: {"x-access-token": props.auth.token}}
             )
             .then(
                 res => {
@@ -46,7 +45,7 @@ function SettingsProfile() {
                         fiscal_code: fiscalCode.current.value,
                         gender: gender.current.value
                     },
-                    {headers: AuthService.authHeader()}
+                    {headers: {"x-access-token": props.auth.token}}
                 )
                 .then(
                     res => toast.success("Data changed successfully!"),
@@ -60,7 +59,7 @@ function SettingsProfile() {
 
     return (
         <>
-            <ProfileAvatar />
+            <ProfileAvatar auth={props.auth}/>
             <form className="row mx-0 mt-3" onSubmit={handleSubmit} noValidate={true}>
                 <h4 className="mb-3 text-center">Change data</h4>
                 <div className="col-6">
@@ -99,7 +98,7 @@ function SettingsProfile() {
                     <button type="submit" className="btn btn-outline-success">Submit</button>
                 </div>
             </form>
-            <ProfileAddress />
+            <ProfileAddress auth={props.auth}/>
         </>
     );
 

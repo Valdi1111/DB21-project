@@ -3,10 +3,10 @@ import SettingsTemplate from "../SettingsTemplate";
 import SettingsProfile from "./SettingsProfile";
 import SettingsNotifications from "../SettingsNotifications";
 import SettingsPayments from "./SettingsPayments";
-import SettingsAddresses from "./addresses/SettingsAddresses";
+import SettingsAddresses from "./SettingsAddresses";
 import ErrorPage from "../../ErrorPage";
 
-function SettingsBuyer() {
+function SettingsBuyer(props) {
     const nav = [
         {id: "profile", name: "Profile"},
         {id: "notifications", name: "Notifications"},
@@ -17,10 +17,10 @@ function SettingsBuyer() {
     return (
        <SettingsTemplate nav={nav}>
            <Routes>
-               <Route path="profile" element={<SettingsProfile/>}/>
-               <Route path="notifications" element={<SettingsNotifications/>}/>
-               <Route path="payments" element={<SettingsPayments/>}/>
-               <Route path="addresses" element={<SettingsAddresses/>}/>
+               <Route path="profile" element={<SettingsProfile auth={props.auth}/>}/>
+               <Route path="notifications" element={<SettingsNotifications auth={props.auth}/>}/>
+               <Route path="payments" element={<SettingsPayments auth={props.auth}/>}/>
+               <Route path="addresses" element={<SettingsAddresses auth={props.auth}/>}/>
                <Route path="*" element={<ErrorPage title="Page not found" name="Home" link="/"/>}/>
            </Routes>
        </SettingsTemplate>

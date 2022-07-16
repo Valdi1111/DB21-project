@@ -1,14 +1,13 @@
-import AuthService from "../../services/AuthService";
 import SettingsBuyer from "./buyer/SettingsBuyer";
 import SettingsSeller from "./seller/SettingsSeller";
 
-function Settings() {
+function Settings(props) {
 
-    if(AuthService.isBuyer()) {
-        return <SettingsBuyer/>;
+    if(props.auth.user.type === "buyer") {
+        return <SettingsBuyer auth={props.auth}/>;
     }
-    if(AuthService.isSeller()) {
-        return <SettingsSeller/>;
+    if(props.auth.user.type === "seller") {
+        return <SettingsSeller auth={props.auth}/>;
     }
 
     return <></>

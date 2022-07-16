@@ -4,12 +4,33 @@ import axios from 'axios';
 import {api_url, product_images_url} from "../services/ApiUrls";
 import "../css/product_card.css"
 import {useNavigate} from "react-router-dom";
+import {formatPrice} from "../services/Utils";
 
 function ShopProduct(props) {
     const navigate = useNavigate();
 
     function handleClick(e) {
         navigate("/product/" + props.product.id);
+    }
+
+    function getPrice() {
+        if (props.product.discount === 0) {
+            return (
+                <span className="btn btn-primary">
+                    {formatPrice(props.product.price)}
+                </span>
+            );
+        }
+        return (
+            <>
+                <span className="d-inline-block btn btn-primary text-">
+                    <del>{formatPrice(props.product.price)}</del>
+                </span>
+                <span className="d-inline-block btn btn-primary ms-2">
+                    {formatPrice(props.product.current_price)}
+                </span>
+            </>
+        );
     }
 
     return (
@@ -19,7 +40,7 @@ function ShopProduct(props) {
                 <div className="card-body">
                     <h5 className="card-title text-break">{props.product.title}</h5>
                     <p className="card-text text-break">{props.product.description}</p>
-                    <span className="btn btn-primary">{props.product.price.toFixed(2) + " €"}</span>
+                    <div>{getPrice()}</div>
                 </div>
             </div>
         </div>
@@ -97,7 +118,7 @@ function Shop() {
     }
 
     return (
-        <main className="mx-0 py-3 row">
+        <main className="flex-grow-1 py-3 row mx-0">
             <aside className="col-3 border-end">
                 {/* SOTTO navbar navbar-light */}
                 <nav className="card rounded flex-column align-items-stretch py-0">

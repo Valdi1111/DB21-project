@@ -1,11 +1,10 @@
 import {api_user_url, avatars_url} from "../../../services/ApiUrls";
-import AuthService from "../../../services/AuthService";
 import ImageSelector from "./ImageSelector";
 import FormData from "form-data";
 import axios from "axios";
 import {toast} from "wc-toast";
 
-function ProfileAvatar() {
+function ProfileAvatar(props) {
 
     function handleCommit(blob, done) {
         let data = new FormData();
@@ -17,7 +16,7 @@ function ProfileAvatar() {
                 {
                     headers: {
                         "content-type": "multipart/form-data",
-                        "x-access-token": AuthService.token
+                        "x-access-token": props.auth.token
                     }
                 }
             )
@@ -34,7 +33,7 @@ function ProfileAvatar() {
         <div className="row mx-0">
             <h4 className="mb-3 text-center">Change avatar</h4>
             <div className="col-6">
-                <img src={avatars_url + AuthService.user.avatar} alt="Avatar"
+                <img src={avatars_url + props.auth.user.avatar} alt="Avatar"
                      className="img-thumbnail mx-auto d-block w-75"/>
             </div>
             <div className="col-6">

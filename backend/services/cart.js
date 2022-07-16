@@ -4,10 +4,17 @@ async function getProducts(user_id) {
     const [results,] = await db.promise().query(
         `SELECT p.id,
                 p.title,
-                p.amount AS max_amount,
+                p.amount                                                  AS max_amount,
                 p.price,
                 p.discount,
-                c.amount
+                c.amount,
+                ROUND(p.price * (100 - p.discount) / 100, 2)              AS current_price,
+                (ROUND(p.price * (100 - p.discount) / 100, 2) * c.amount) AS total,
+                (SELECT pi.path
+                 FROM product_has_image pi
+                 WHERE pi.product_id = p.id
+                 ORDER BY pi.order
+                 LIMIT 1)                                                 AS cover
          FROM cart c
                   INNER JOIN product p ON c.product_id = p.id
          WHERE c.buyer_id = ?;`,

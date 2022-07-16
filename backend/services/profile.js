@@ -77,6 +77,36 @@ async function editBuyerProfile(user_id, name, surname, fiscal_code, gender) {
     return results;
 }
 
+async function getBuyerBalance(buyer_id) {
+    const [results,] = await db.promise().query(
+        `SELECT b.balance
+         FROM buyer b
+         WHERE b.id = ?;`,
+        [buyer_id]
+    );
+    return results;
+}
+
+async function increaseBuyerBalance(buyer_id, amount) {
+    const [results,] = await db.promise().query(
+        `UPDATE buyer b
+         SET b.balance = b.balance + ?
+         WHERE b.id = ?;`,
+        [amount, buyer_id]
+    );
+    return results;
+}
+
+async function decreaseBuyerBalance(buyer_id, amount) {
+    const [results,] = await db.promise().query(
+        `UPDATE buyer b
+         SET b.balance = IF(? > b.balance, 0, b.balance - ?)
+         WHERE b.id = ?;`,
+        [amount, buyer_id, buyer_id]
+    );
+    return results;
+}
+
 async function getSellerProfile(user_id) {
     const [results,] = await db.promise().query(
         `SELECT u.id,
@@ -112,6 +142,9 @@ module.exports = {
     editUserAddress,
     getBuyerProfile,
     editBuyerProfile,
+    getBuyerBalance,
+    increaseBuyerBalance,
+    decreaseBuyerBalance,
     getSellerProfile,
     editSellerProfile
 }

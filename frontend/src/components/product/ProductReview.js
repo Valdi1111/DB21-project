@@ -3,7 +3,7 @@ import {avatars_url, api_buyer_url, review_images_url} from "../../services/ApiU
 import axios from "axios";
 import {toast} from "wc-toast";
 import Stars from "./Stars";
-import AuthService from "../../services/AuthService";
+import {formatDate} from "../../services/Utils";
 
 function ProductReview(props) {
     const [helpful, setHelpful] = useState(0);
@@ -12,19 +12,19 @@ function ProductReview(props) {
         for (let i = 0; i < tx.length; i++) {
             tx[i].style.height = (tx[i].scrollHeight + 2) + "px";
         }
-        if (!AuthService.isBuyer()) {
+        if (!props.auth || props.auth.user.type !== "buyer") {
             return;
         }
         axios
             .get(
                 `${api_buyer_url}products/reviews/${props.review.id}/helpful`,
-                {headers: AuthService.authHeader()}
+                {headers: {"x-access-token": props.auth.token}}
             )
             .then(res => setHelpful(res.data.helpful));
     }, []);
 
     function handleHelpful(e) {
-        if (!AuthService.isBuyer()) {
+        if (!props.auth || props.auth.user.type !== "buyer") {
             toast.error("You are not a buyer!");
             return;
         }
@@ -32,7 +32,7 @@ function ProductReview(props) {
             .post(
                 `${api_buyer_url}products/reviews/${props.review.id}/helpful`,
                 {},
-                {headers: AuthService.authHeader()}
+                {headers: {"x-access-token": props.auth.token}}
             )
             .then(
                 res => setHelpful(1),
@@ -41,14 +41,14 @@ function ProductReview(props) {
     }
 
     function handleUndo(e) {
-        if (!AuthService.isBuyer()) {
+        if (!props.auth || props.auth.user.type !== "buyer") {
             toast.error("You are not a buyer!");
             return;
         }
         axios
             .delete(
                 `${api_buyer_url}products/reviews/${props.review.id}/helpful`,
-                {headers: AuthService.authHeader()}
+                {headers: {"x-access-token": props.auth.token}}
             )
             .then(
                 res => setHelpful(0),
@@ -63,7 +63,7 @@ function ProductReview(props) {
                      src={avatars_url + props.review.avatar} alt="avatar" width="50" height="50"/>
                 <div>
                     <h6 className="fw-bold text-primary mb-1">{props.review.username}</h6>
-                    <p className="text-muted small mb-0">{"Shared publicly on " + props.review.created}</p>
+                    <p className="text-muted small mb-0">{"Shared publicly on " + formatDate(props.review.created)}</p>
                 </div>
             </div>
             <div>

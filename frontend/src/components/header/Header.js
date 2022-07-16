@@ -3,7 +3,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faShoppingCart, faWineGlass} from "@fortawesome/free-solid-svg-icons"
 import Notifications from "./Notifications";
 import {avatars_url} from "../../services/ApiUrls";
-import AuthService from "../../services/AuthService";
 
 function Header(props) {
     const navigate = useNavigate();
@@ -16,7 +15,7 @@ function Header(props) {
 
     function logged() {
         let buttons = <></>;
-        if (AuthService.isBuyer()) {
+        if (props.auth.user.type === "buyer") {
             buttons = (
                 <Link to="/cart" className="p-1 me-2" style={{width: 32, height: 32}}>
                     <FontAwesomeIcon icon={faShoppingCart} className="text-secondary w-100 h-100"/>
@@ -25,22 +24,33 @@ function Header(props) {
         }
         return (
             <div className="d-flex flex-wrap align-items-center justify-content-center ">
-                <Notifications/>
+                <Notifications auth={props.auth}/>
                 {buttons}
                 <div className="dropdown text-end ps-1">
                 <span className="d-block link-secondary text-decoration-none dropdown-toggle"
                       style={{cursor: "pointer"}} id="dropdown-user" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src={avatars_url + AuthService.user.avatar} alt="mdo" width="32" height="32"
+                    <img src={avatars_url + props.auth.user.avatar} alt="mdo" width="32" height="32"
                          className="rounded-circle"/>
-                    <span className="px-1">{AuthService.user.username}</span>
+                    <span className="px-1">{props.auth.user.username}</span>
                 </span>
                     <ul className="dropdown-menu text-small" aria-labelledby="dropdown-user">
+                        {props.auth.user.type === "buyer" ?
+                            <li><Link to="/orders" className="dropdown-item">Orders</Link></li> :
+                            <></>
+                        }
+                        {props.auth.user.type === "seller" ?
+                            <li><Link to="/my-products" className="dropdown-item">Products</Link></li> :
+                            <></>
+                        }
                         <li><Link to="/settings/profile" className="dropdown-item">Settings</Link></li>
                         <li>
                             <hr className="dropdown-divider"/>
                         </li>
-                        <li><span className="dropdown-item" style={{cursor: "pointer"}}
-                                  onClick={handleLogout}>Sign out</span></li>
+                        <li>
+                            <span className="dropdown-item" style={{cursor: "pointer"}} onClick={handleLogout}>
+                                Sign out
+                            </span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -68,7 +78,7 @@ function Header(props) {
                     <li><a href="#" className="nav-link px-2 link-dark">Customers</a></li>
                     <li><a href="#" className="nav-link px-2 link-dark">Products</a></li>
                 </ul>
-                {props.logged ? logged() : notLogged()}
+                {props.auth ? logged() : notLogged()}
             </div>
         </header>
     );

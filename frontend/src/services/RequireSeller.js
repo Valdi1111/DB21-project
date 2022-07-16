@@ -1,13 +1,13 @@
 import {Navigate, useLocation} from "react-router-dom";
-import AuthService from "./AuthService";
 
 function RequireSeller(props) {
-    let location = useLocation();
+    //let location = useLocation();
 
-    if (AuthService.isSeller()) {
+    if (props.auth && props.auth.user.type === "seller") {
         return props.children;
     } else {
-        return <Navigate to="/login" state={{from: location}} replace/>
+        //return <Navigate to="/login" state={{from: location}} replace/>
+        return <></>;
     }
 }
 

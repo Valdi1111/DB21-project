@@ -1,11 +1,16 @@
 import axios from "axios";
 import {toast} from "wc-toast";
-import AuthService from "../../../../services/AuthService";
-import {api_seller_url} from "../../../../services/ApiUrls";
-import {useRef} from "react";
+import {api_seller_url} from "../../../services/ApiUrls";
+import {useEffect, useRef} from "react";
 
 function ProductUnansweredFaq(props) {
     const answer = useRef();
+    useEffect(() => {
+        const tx = document.getElementsByClassName("area");
+        for (let i = 0; i < tx.length; i++) {
+            tx[i].style.height = (tx[i].scrollHeight + 2) + "px";
+        }
+    }, []);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -14,7 +19,7 @@ function ProductUnansweredFaq(props) {
                 .put(
                     `${api_seller_url}products/faqs/${props.faq.id}`,
                     {answer: answer.current.value},
-                    {headers: AuthService.authHeader()}
+                    {headers: {"x-access-token": props.auth.token}}
                 )
                 .then(
                     res => {
@@ -33,7 +38,7 @@ function ProductUnansweredFaq(props) {
         axios
             .delete(
                 `${api_seller_url}products/faqs/${props.faq.id}`,
-                {headers: AuthService.authHeader()}
+                {headers: {"x-access-token": props.auth.token}}
             )
             .then(
                 res => {
@@ -48,7 +53,10 @@ function ProductUnansweredFaq(props) {
         <form onSubmit={handleSubmit} noValidate={true}>
             <div className="row mx-0 mb-2">
                 <h6 className="col-auto mb-0" style={{width: "6rem"}}>Question:</h6>
-                <p className="col mb-0 text-break">{props.faq.question}</p>
+                <div className="col">
+                        <textarea className="form-control area" defaultValue={props.faq.question} disabled={true}
+                                  style={{resize: "none", overflowY: "hidden"}}/>
+                </div>
             </div>
             <div className="row mx-0">
                 <h6 className="col-auto mb-0" style={{width: "6rem"}}>Answer:</h6>

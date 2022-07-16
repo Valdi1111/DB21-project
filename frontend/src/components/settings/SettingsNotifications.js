@@ -2,9 +2,8 @@ import {useEffect, useState} from "react";
 import $ from "jquery";
 import axios from "axios";
 import {api_user_url} from "../../services/ApiUrls";
-import AuthService from "../../services/AuthService";
 import {Link} from "react-router-dom";
-import {getNotificationLink} from "../../services/Utils";
+import {formatDateTime, getNotificationLink} from "../../services/Utils";
 
 function Notification(props) {
     return (
@@ -14,20 +13,20 @@ function Notification(props) {
                       className="h6 text-primary text-wrap text-break mt-1">{props.notification.title}</Link>
                 <p className="text-wrap text-break">{props.notification.description}</p>
                 <div className="d-flex flex-row justify-content-end" style={{fontSize: "85%"}}>
-                    <span className="text-muted">{props.notification.created}</span>
+                    <span className="text-muted">{formatDateTime(props.notification.created)}</span>
                 </div>
             </div>
         </div>
     );
 }
 
-function SettingsNotifications() {
+function SettingsNotifications(props) {
     const [notifications, setNotifications] = useState([]);
     useEffect(() => {
         axios
             .get(
                 `${api_user_url}notifications/history`,
-                {headers: AuthService.authHeader()}
+                {headers: {"x-access-token": props.auth.token}}
             )
             .then(res => setNotifications(res.data))
     }, []);

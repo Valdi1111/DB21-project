@@ -1,9 +1,8 @@
 import FormData from "form-data";
 import axios from "axios";
-import {api_seller_url, api_user_url} from "../../../../services/ApiUrls";
-import AuthService from "../../../../services/AuthService";
+import {api_seller_url} from "../../../services/ApiUrls";
 import {toast} from "wc-toast";
-import ImageSelector from "../../profile/ImageSelector";
+import ImageSelector from "../../settings/profile/ImageSelector";
 
 function ProductAddImage(props) {
 
@@ -17,7 +16,7 @@ function ProductAddImage(props) {
                 {
                     headers: {
                         "content-type": "multipart/form-data",
-                        "x-access-token": AuthService.token
+                        "x-access-token": props.auth.token
                     }
                 }
             )

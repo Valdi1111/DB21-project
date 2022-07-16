@@ -1,6 +1,6 @@
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {api_url} from "../../services/ApiUrls";
+import {api_buyer_url, api_url} from "../../services/ApiUrls";
 import axios from "axios";
 import ProductFaq from "./ProductFaq";
 import ProductReview from "./ProductReview";
@@ -8,9 +8,10 @@ import ProductRating from "./ProductRating";
 import ProductImage from "./ProductImage";
 import ProductFaqAdd from "./ProductFaqAdd";
 import ProductReviewAdd from "./ProductReviewAdd";
-import AuthService from "../../services/AuthService";
+import {formatPrice} from "../../services/Utils";
+import {toast} from "wc-toast";
 
-function Product() {
+function Product(props) {
     const {id} = useParams();
 
     const [product, setProduct] = useState({});
@@ -53,9 +54,45 @@ function Product() {
         setReviewsOrder(e.target.value);
     }
 
+    function getPrice() {
+        if (!product) {
+            return <></>;
+        }
+        if (product.discount === 0) {
+            return (
+                <span className="btn btn-primary">
+                    {formatPrice(product.price)}
+                </span>
+            );
+        }
+        return (
+            <>
+                <span className="d-inline-block btn btn-primary text-">
+                    <del>{formatPrice(product.price)}</del>
+                </span>
+                <span className="d-inline-block btn btn-primary ms-2">
+                    {formatPrice(product.current_price)}
+                </span>
+            </>
+        );
+    }
+
+    function addToCart(e) {
+        axios
+            .post(
+                `${api_buyer_url}cart/`,
+                {product: id, amount: 1},
+                {headers: {"x-access-token": props.auth.token}}
+            )
+            .then(
+                res => toast.success("Product added to cart!"),
+                err => toast.error("An error occurred...")
+            );
+    }
+
     return (
-        <main>
-            <div className="row mx-0 my-3">
+        <main className="flex-grow-1 py-3">
+            <div className="row mx-0 mb-3">
                 <div className="col-12 col-sm-9 col-md-7 col-lg-4 mx-auto">
                     <ProductImage images={images}/>
                 </div>
@@ -64,14 +101,17 @@ function Product() {
                     <Link className="text-muted"
                           to={"/seller/" + product.seller_id}>{"Visit the " + product.business_name + " store"}</Link>
                     <p className="mt-2 mb-3">{product.description}</p>
-                    <span className="btn btn-primary">{product.price?.toFixed(2) + " €"}</span>
+                    <div>
+                        {getPrice()}
+                        <button className="btn btn-primary ms-2" onClick={addToCart}>Add to Cart</button>
+                    </div>
                 </div>
             </div>
             <div className="row mx-0 border-top">
                 <div className="d-flex flex-start align-items-center">
                     <h4 className="col-auto my-3">Customer questions & answers</h4>
                     {
-                        AuthService.isBuyer()
+                        props.auth && props.auth.user.type === "buyer"
                             ?
                             <button className="btn btn-outline-secondary btn-sm ms-2" type="button"
                                     data-bs-toggle="collapse"
@@ -84,8 +124,8 @@ function Product() {
                 </div>
                 <div className="row mx-0">
                     <div className="col col-lg-9 px-0">
-                        <ProductFaqAdd product={product.id}/>
-                        {faq?.map(faq => <ProductFaq key={faq.id} faq={faq}/>)}
+                        <ProductFaqAdd auth={props.auth} product={product.id}/>
+                        {faq.map(faq => <ProductFaq auth={props.auth} key={faq.id} faq={faq}/>)}
                     </div>
                 </div>
             </div>
@@ -106,7 +146,7 @@ function Product() {
                             </select>
                         </div>
                         {
-                            AuthService.isBuyer()
+                            props.auth && props.auth.user.type === "buyer"
                                 ?
                                 <button className="btn btn-outline-secondary btn-sm ms-2" type="button"
                                         data-bs-toggle="collapse"
@@ -117,8 +157,8 @@ function Product() {
                                 <></>
                         }
                     </div>
-                    <ProductReviewAdd product={product.id}/>
-                    {reviews?.map(review => <ProductReview key={review.id} review={review}/>)}
+                    <ProductReviewAdd auth={props.auth} product={product.id}/>
+                    {reviews.map(review => <ProductReview auth={props.auth} key={review.id} review={review}/>)}
                 </div>
             </div>
         </main>

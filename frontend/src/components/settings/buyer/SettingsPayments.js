@@ -1,7 +1,7 @@
 import {useEffect} from "react";
 import $ from "jquery";
 
-function SettingsPayments() {
+function SettingsPayments(props) {
 
     useEffect(() => {
         $(".menu").removeClass("active");

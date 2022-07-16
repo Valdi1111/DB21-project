@@ -4,10 +4,9 @@ import {useEffect, useRef} from "react";
 import $ from "jquery";
 import axios from "axios";
 import {api_seller_url} from "../../../services/ApiUrls";
-import AuthService from "../../../services/AuthService";
 import {toast} from "wc-toast";
 
-function SettingsProfile() {
+function SettingsProfile(props) {
     const name = useRef();
     const vat = useRef();
 
@@ -20,7 +19,7 @@ function SettingsProfile() {
         axios
             .get(
                 `${api_seller_url}profile`,
-                {headers: AuthService.authHeader()}
+                {headers: {"x-access-token": props.auth.token}}
             )
             .then(
                 res => {
@@ -40,7 +39,7 @@ function SettingsProfile() {
                         name: name.current.value,
                         vat: vat.current.value
                     },
-                    {headers: AuthService.authHeader()}
+                    {headers: {"x-access-token": props.auth.token}}
                 )
                 .then(
                     res => toast.success("Data changed successfully!"),
@@ -54,7 +53,7 @@ function SettingsProfile() {
 
     return (
         <>
-            <ProfileAvatar/>
+            <ProfileAvatar auth={props.auth}/>
             <form className="row mx-0 mt-3" onSubmit={handleSubmit} noValidate={true}>
                 <h4 className="mb-3 text-center">Change data</h4>
                 <div className="col-6">
@@ -75,7 +74,7 @@ function SettingsProfile() {
                     <button type="submit" className="btn btn-outline-success">Submit</button>
                 </div>
             </form>
-            <ProfileAddress/>
+            <ProfileAddress auth={props.auth}/>
         </>
     );
 

@@ -3,7 +3,6 @@ import {api_buyer_url} from "../../services/ApiUrls";
 import {toast} from "wc-toast";
 import {useRef} from "react";
 import FormData from "form-data";
-import AuthService from "../../services/AuthService";
 
 function ProductReviewAdd(props) {
     const title = useRef();
@@ -12,7 +11,7 @@ function ProductReviewAdd(props) {
     const image = useRef();
 
     function handleSubmit(e) {
-        if (!AuthService.isBuyer()) {
+        if (!props.auth || props.auth.user.type !== "buyer") {
             toast.error("You are not a buyer!");
             return;
         }
@@ -32,7 +31,7 @@ function ProductReviewAdd(props) {
                     {
                         headers: {
                             "content-type": "multipart/form-data",
-                            "x-access-token": AuthService.token
+                            "x-access-token": props.auth.token
                         }
                     }
                 )

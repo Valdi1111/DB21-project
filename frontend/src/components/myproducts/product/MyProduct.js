@@ -1,15 +1,13 @@
 import {useEffect, useRef, useState} from "react";
-import $ from "jquery";
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import AuthService from "../../../../services/AuthService";
-import {api_seller_url, api_url} from "../../../../services/ApiUrls";
+import {api_seller_url, api_url} from "../../../services/ApiUrls";
 import {toast} from "wc-toast";
 import ProductImage from "./ProductImage";
 import ProductAddImage from "./ProductAddImage";
 import ProductUnansweredFaq from "./ProductUnansweredFaq";
 
-function SettingsProduct() {
+function MyProduct(props) {
     const {id} = useParams();
 
     const title = useRef();
@@ -24,15 +22,10 @@ function SettingsProduct() {
     const [faq, setFaq] = useState([]);
 
     useEffect(() => {
-        $(".menu").removeClass("active");
-        $("#products").addClass("active");
-    }, []);
-
-    useEffect(() => {
         axios
             .get(
                 `${api_seller_url}products/${id}`,
-                {headers: AuthService.authHeader()}
+                {headers: {"x-access-token": props.auth.token}}
             )
             .then(
                 res => {
@@ -61,7 +54,7 @@ function SettingsProduct() {
         axios
             .get(
                 `${api_seller_url}products/${id}/faqs`,
-                {headers: AuthService.authHeader()}
+                {headers: {"x-access-token": props.auth.token}}
             )
             .then(res => setFaq(res.data));
     }
@@ -81,7 +74,7 @@ function SettingsProduct() {
                         amount: amount.current.value,
                         visible: visible.current.checked
                     },
-                    {headers: AuthService.authHeader()}
+                    {headers: {"x-access-token": props.auth.token}}
                 )
                 .then(
                     res => toast.success("Product data changed successfully!"),
@@ -94,10 +87,10 @@ function SettingsProduct() {
     }
 
     return (
-        <>
+        <main className="flex-grow-1 py-3">
             <div className="row mx-0">
                 <h4 className="mb-3 text-center">Change product images</h4>
-                {images.map(i => <ProductImage key={i.id} image={i} refresh={refreshImages}/>)}
+                {images.map(i => <ProductImage auth={props.auth} key={i.id} image={i} refresh={refreshImages}/>)}
                 <div className="col-12">
                     <hr/>
                     <button className="btn btn-outline-secondary w-100" data-bs-toggle="collapse"
@@ -106,7 +99,7 @@ function SettingsProduct() {
                     </button>
                 </div>
                 <div id="image-add" className="col-12 mt-2 collapse">
-                    <ProductAddImage product={id} refresh={refreshImages}/>
+                    <ProductAddImage auth={props.auth} product={id} refresh={refreshImages}/>
                 </div>
             </div>
             <form className="row mx-0 mt-3" onSubmit={handleDataChange} noValidate={true}>
@@ -170,11 +163,11 @@ function SettingsProduct() {
             </form>
             <div className="mt-3">
                 <h4 className="mb-3 text-center">Unanswered questions</h4>
-                {faq.map(q => <ProductUnansweredFaq key={q.id} faq={q} refresh={refreshFaqs}/>)}
+                {faq.map(q => <ProductUnansweredFaq auth={props.auth} key={q.id} faq={q} refresh={refreshFaqs}/>)}
             </div>
-        </>
+        </main>
     );
 
 }
 
-export default SettingsProduct;
+export default MyProduct;

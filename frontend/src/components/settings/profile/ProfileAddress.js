@@ -1,6 +1,5 @@
 import axios from "axios";
-import {api_buyer_url, api_user_url} from "../../../services/ApiUrls";
-import AuthService from "../../../services/AuthService";
+import {api_user_url} from "../../../services/ApiUrls";
 import {toast} from "wc-toast";
 import {useEffect, useRef} from "react";
 
@@ -15,7 +14,7 @@ function ProfileAddress(props) {
         axios
             .get(
                 `${api_user_url}data/address`,
-                {headers: AuthService.authHeader()}
+                {headers: {"x-access-token": props.auth.token}}
             )
             .then(
                 res => {
@@ -42,7 +41,7 @@ function ProfileAddress(props) {
                 .put(
                     `${api_user_url}data/address`,
                     data,
-                    {headers: AuthService.authHeader()}
+                    {headers: {"x-access-token": props.auth.token}}
                 )
                 .then(
                     res => {

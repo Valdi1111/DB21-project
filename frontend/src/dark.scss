@@ -64,3 +64,11 @@ body[data-theme="dark"] {
 
   @import "node_modules/bootstrap/scss/bootstrap";
 }
+
+body[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background-color: #3f4447;
+}
+
+body[data-theme="dark"] .background {
+  background: $dark;
+}

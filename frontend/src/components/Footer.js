@@ -20,7 +20,7 @@ function Footer() {
     }
 
     return (
-        <footer className="border-top mt-auto">
+        <footer className="border-top">
             <div className="pt-3 mx-0 row">
                 <div className="my-3 px-3 col-md-12 text-center text-md-start col-lg-8 order-lg-0">
                     <FontAwesomeIcon icon={faWineGlass} style={{width: 40, height: 32}}/>

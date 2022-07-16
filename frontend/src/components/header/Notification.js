@@ -1,8 +1,7 @@
 import {Link} from "react-router-dom";
 import axios from "axios";
 import {api_user_url} from "../../services/ApiUrls";
-import AuthService from "../../services/AuthService";
-import {getNotificationLink} from "../../services/Utils";
+import {formatDateTime, getNotificationLink} from "../../services/Utils";
 import {toast} from "wc-toast";
 
 function Notification(props) {
@@ -12,7 +11,7 @@ function Notification(props) {
             .post(
                 `${api_user_url}notifications/${props.notification.id}/read`,
                 {},
-                {headers: AuthService.authHeader()}
+                {headers: {"x-access-token": props.auth.token}}
             )
             .then(
                 res => props.read(props.notification.id),
@@ -27,7 +26,7 @@ function Notification(props) {
             <p className="text-wrap text-break">{props.notification.description}</p>
             <div className="d-flex flex-row justify-content-between" style={{fontSize: "85%"}}>
                 <span className="text-primary" style={{cursor: "pointer"}} onClick={handleRead}>Mark as read</span>
-                <span className="text-muted">{props.notification.created}</span>
+                <span className="text-muted">{formatDateTime(props.notification.created)}</span>
             </div>
         </div>
     );

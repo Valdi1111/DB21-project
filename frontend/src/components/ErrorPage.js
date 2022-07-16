@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 function ErrorPage(props) {
 
     return (
-        <main className="p-3 text-center">
+        <main className="flex-grow-1 p-3 text-center">
             <h1>{props.title}</h1>
             <div className="w-50 m-auto py-5">
                 <img src={image} alt="Error logo" className="img-fluid" />

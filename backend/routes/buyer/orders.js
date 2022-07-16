@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const orders = require("../../services/orders");
+const response = require("../../methods/response");
 
 router.get(
     "/",
@@ -9,6 +10,24 @@ router.get(
             return res.json(await orders.getAll(req.user_id));
         } catch (err) {
             console.error("Error on GET buyer/orders.");
+            next(err);
+        }
+    }
+);
+
+router.get(
+    "/:id",
+    async (req, res, next) => {
+        try {
+            const {id} = req.params;
+            const results = await orders.get(req.user_id, id);
+            // nothing found
+            if (!results.length) {
+                return response.notFound(res, "order_not_found", "No order found with id " + id + "!");
+            }
+            return res.json(results[0]);
+        } catch (err) {
+            console.error("Error on GET buyer/orders/:id.");
             next(err);
         }
     }

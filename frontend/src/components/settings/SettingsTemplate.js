@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 function SettingsTemplate(props) {
 
     return (
-        <main className="mx-0 py-3 row flex-grow-1">
+        <main className="flex-grow-1 py-3 row mx-0">
             <aside className="col-3 border-end">
                 <nav className="flex-column nav nav-pills align-items-stretch">
                     {props.nav.map(d =>

@@ -1,7 +1,6 @@
 import {useRef} from "react";
 import axios from "axios";
-import {api_seller_url, product_images_url} from "../../../../services/ApiUrls";
-import AuthService from "../../../../services/AuthService";
+import {api_seller_url, product_images_url} from "../../../services/ApiUrls";
 import {toast} from "wc-toast";
 
 function ProductImage(props) {
@@ -11,7 +10,7 @@ function ProductImage(props) {
         axios
             .delete(
                 `${api_seller_url}products/images/${props.image.id}`,
-                {headers: AuthService.authHeader()}
+                {headers: {"x-access-token": props.auth.token}}
             )
             .then(
                 res => {
@@ -31,7 +30,7 @@ function ProductImage(props) {
             .put(
                 `${api_seller_url}products/images/${props.image.id}`,
                 {order: order.current.value},
-                {headers: AuthService.authHeader()}
+                {headers: {"x-access-token": props.auth.token}}
             )
             .then(
                 res => {
@@ -43,7 +42,7 @@ function ProductImage(props) {
     }
 
     return (
-        <div className="col-4">
+        <div className="col-3">
             <img src={product_images_url + props.image.path} className="img-thumbnail mb-2"
                  alt={"Image " + props.image.order}/>
             <div className="input-group mb-2">

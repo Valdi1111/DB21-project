@@ -6,31 +6,25 @@ async function getProducts(category, max_price, min_price, search, limit, offset
                                  p.description,
                                  p.price,
                                  p.discount,
+                                 ROUND(p.price * (100 - p.discount) / 100, 2) AS current_price,
                                  (SELECT pi.path
                                   FROM product_has_image pi
                                   WHERE pi.product_id = p.id
                                   ORDER BY pi.order
-                                  LIMIT 1) AS cover
+                                  LIMIT 1)                                    AS cover
                  FROM product p
                           LEFT JOIN product_has_category c
                                     ON c.product_id = p.id
-                 WHERE p.visible = 1`;
+                 WHERE p.visible = ?
+                   AND p.title LIKE ?`;
     if (category) {
         query += ` AND c.category_id = ${db.escape(category)}`;
     }
-    if (max_price) {
-        query += ` AND p.price <= ${db.escape(max_price)}`;
-    }
-    if (min_price) {
-        query += ` AND p.price >= ${db.escape(min_price)}`;
-    }
-    if (search) {
-        query += ` AND p.title LIKE ${db.escape("%" + search + "%")}`;
-    }
+    query += ` HAVING current_price <= ? AND current_price >= ?`;
     query += ` LIMIT ${limit && !isNaN(limit) ? limit : 12} OFFSET ${offset && !isNaN(offset) ? offset : 0};`;
     const [results,] = await db.promise().query(
         query,
-        []
+        [1, search ? `%${search}%` : `%%`, max_price ? max_price : Number.MAX_SAFE_INTEGER, min_price ? min_price : 0]
     );
     return results;
 }
@@ -39,12 +33,13 @@ async function getProduct(product_id) {
     const [results,] = await db.promise().query(
         `SELECT p.id,
                 p.title,
-                p.description_full AS description,
+                p.description_full                           AS description,
                 p.price,
-                p.amount,
                 p.discount,
+                ROUND(p.price * (100 - p.discount) / 100, 2) AS current_price,
+                p.amount,
                 p.seller_id,
-                s.name             AS business_name,
+                s.name                                       AS business_name,
                 p.visible
          FROM product p
                   LEFT JOIN seller s ON s.id = p.seller_id
@@ -209,25 +204,23 @@ async function deleteReviewHelpful(user_id, review_id) {
 /* SELLER */
 
 async function getSellerProducts(user_id, search, limit, offset) {
-    let query = `SELECT DISTINCT p.id,
-                                 p.title,
-                                 p.description,
-                                 p.price,
-                                 p.discount,
-                                 (SELECT pi.path
-                                  FROM product_has_image pi
-                                  WHERE pi.product_id = p.id
-                                  ORDER BY pi.order
-                                  LIMIT 1) AS cover
-                 FROM product p
-                 WHERE p.seller_id = ?`;
-    if (search) {
-        query += ` AND p.title LIKE ${db.escape("%" + search + "%")}`;
-    }
-    query += ` LIMIT ${limit && !isNaN(limit) ? limit : 12} OFFSET ${offset && !isNaN(offset) ? offset : 0};`;
     const [results,] = await db.promise().query(
-        query,
-        [user_id]
+        `SELECT DISTINCT p.id,
+                         p.title,
+                         p.description,
+                         p.price,
+                         p.discount,
+                         ROUND(p.price * (100 - p.discount) / 100, 2) AS current_price,
+                         (SELECT pi.path
+                          FROM product_has_image pi
+                          WHERE pi.product_id = p.id
+                          ORDER BY pi.order
+                          LIMIT 1)                                    AS cover
+         FROM product p
+         WHERE p.seller_id = ?
+           AND p.title LIKE ?
+         LIMIT ${limit && !isNaN(limit) ? limit : 12} OFFSET ${offset && !isNaN(offset) ? offset : 0};`,
+        [user_id, search ? `%${search}%` : `%%`]
     );
     return results;
 }
@@ -240,6 +233,7 @@ async function getSellerProduct(user_id, product_id) {
                 p.description_full,
                 p.price,
                 p.discount,
+                ROUND(p.price * (100 - p.discount) / 100, 2) AS current_price,
                 p.amount,
                 p.visible
          FROM product p
@@ -256,8 +250,8 @@ async function editSellerProduct(user_id, product_id, title, description, descri
          SET p.title            = ?,
              p.description      = ?,
              p.description_full = ?,
-             p.price            = ?,
-             p.discount         = ?,
+             p.price            = ROUND(?, 2),
+             p.discount         = ROUND(?, 1),
              p.amount           = ?,
              p.visible          = ?
          WHERE p.id = ?
