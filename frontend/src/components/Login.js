@@ -6,7 +6,7 @@ import {api_auth_url} from "../services/ApiUrls";
 import image from "../images/login.svg"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faGoogle, faFacebook, faTwitter} from "@fortawesome/free-brands-svg-icons"
-import {useLocation, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 
 function Login(props) {
     const [email, setEmail] = useState("");
@@ -99,7 +99,9 @@ function Login(props) {
                         </div>
                         {/* Submit button */}
                         <button type="submit" className="btn btn-primary btn-lg btn-block w-100">Sign in</button>
-                        <p className="my-2">Do you already have an account? <a href="/register">Register</a></p>
+                        <p className="my-2">
+                            Do you already have an account? <Link className="text-muted" to="/register">Register</Link>
+                        </p>
                         {/* Separator */}
                         <div className="divider d-flex align-items-center my-4">
                             <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
