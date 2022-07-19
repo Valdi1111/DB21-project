@@ -78,6 +78,10 @@ function Product(props) {
     }
 
     function addToCart(e) {
+        if (!props.auth || props.auth.user.type !== "buyer") {
+            toast.error("You are not a buyer!");
+            return;
+        }
         axios
             .post(
                 `${api_buyer_url}cart/`,
@@ -98,8 +102,9 @@ function Product(props) {
                 </div>
                 <div className="col-12 col-lg-8 mt-3 mt-lg-0">
                     <h3 className="mb-0">{product.title}</h3>
-                    <Link className="text-muted"
-                          to={"/seller/" + product.seller_id}>{"Visit the " + product.business_name + " store"}</Link>
+                    <Link className="text-muted" to={"/chat/" + product.seller_id}>
+                        {"Contact " + product.business_name}
+                    </Link>
                     <p className="mt-2 mb-3">{product.description}</p>
                     <div>
                         {getPrice()}

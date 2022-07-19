@@ -1,10 +1,10 @@
 import {Navigate, useLocation} from "react-router-dom";
 import ErrorPage from "../components/ErrorPage";
 
-function RequireBuyer(props) {
+function RequireBuyerSeller(props) {
     //let location = useLocation();
 
-    if (props.auth && props.auth.user.type === "buyer") {
+    if (props.auth && (props.auth.user.type === "buyer" || props.auth.user.type === "seller")) {
         return props.children;
     } else {
         //return <Navigate to="/login" state={{from: location}} replace/>
@@ -12,4 +12,4 @@ function RequireBuyer(props) {
     }
 }
 
-export default RequireBuyer;
+export default RequireBuyerSeller;

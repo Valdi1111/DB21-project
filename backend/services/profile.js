@@ -102,7 +102,7 @@ async function decreaseBuyerBalance(buyer_id, amount) {
         `UPDATE buyer b
          SET b.balance = IF(? > b.balance, 0, b.balance - ?)
          WHERE b.id = ?;`,
-        [amount, buyer_id, buyer_id]
+        [amount, amount, buyer_id]
     );
     return results;
 }

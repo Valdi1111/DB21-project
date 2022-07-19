@@ -45,11 +45,12 @@ body[data-theme="dark"] {
   $input-border-color: rgb(60, 65, 68);
   $input-focus-bg: $input-bg;
   $input-focus-color: $input-color;
-  $input-disabled-bg : rgb(35, 38, 39);
+  $input-disabled-bg: rgb(35, 38, 39);
 
   $form-select-bg: $body-bg;
   $form-select-color: $body-color;
   $form-select-border-color: rgb(60, 65, 68);
+  $form-select-disabled-bg: rgb(35, 38, 39);
 
   $form-check-bg: $body-bg;
   $form-check-color: $body-color;
@@ -58,6 +59,10 @@ body[data-theme="dark"] {
   $input-group-addon-bg: #232627;
   $input-group-addon-color: $body-color;
   $input-group-addon-border-color: rgb(60, 65, 68);
+
+  $form-file-button-bg: $body-bg;
+  $form-file-button-hover-bg: $body-bg;
+  $form-file-button-color: $body-color;
 
   --#{$variable-prefix}body-color: #{$body-color};
   --#{$variable-prefix}body-bg: #{$body-bg};

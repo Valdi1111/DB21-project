@@ -27,8 +27,8 @@ async function getAllBuyers(seller_id) {
     const [results,] = await db.promise().query(
         `SELECT DISTINCT b.id, b.name, b.surname, u.username, u.email, u.avatar
          FROM message m
-                  INNER JOIN user u on m.seller_id = u.id
-                  INNER JOIN buyer b on m.seller_id = b.id
+                  INNER JOIN user u on m.buyer_id = u.id
+                  INNER JOIN buyer b on m.buyer_id = b.id
          WHERE m.seller_id = ?`,
         [seller_id]
     );

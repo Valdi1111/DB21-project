@@ -41,9 +41,9 @@ exports.tokenCheck = function (req, res, next) {
 
 exports.userCheck = function (req, res, next) {
     db.query(
-        `SELECT * 
-            FROM user u 
-            WHERE u.id = ${db.escape(req.user_id)};`,
+        `SELECT *
+         FROM user u
+         WHERE u.id = ${db.escape(req.user_id)};`,
         (err, result, fields) => {
             if (err) {
                 return response.internalError(res, err);
@@ -58,9 +58,9 @@ exports.userCheck = function (req, res, next) {
 
 exports.buyerCheck = function (req, res, next) {
     db.query(
-        `SELECT * 
-            FROM buyer b 
-            WHERE b.id = ${db.escape(req.user_id)};`,
+        `SELECT *
+         FROM buyer b
+         WHERE b.id = ${db.escape(req.user_id)};`,
         (err, result, fields) => {
             if (err) {
                 return response.internalError(res, err);
@@ -75,9 +75,27 @@ exports.buyerCheck = function (req, res, next) {
 
 exports.sellerCheck = function (req, res, next) {
     db.query(
-        `SELECT * 
-            FROM seller s 
-            WHERE s.id = ${db.escape(req.user_id)};`,
+        `SELECT *
+         FROM seller s
+         WHERE s.id = ${db.escape(req.user_id)};`,
+        (err, result, fields) => {
+            if (err) {
+                return response.internalError(res, err);
+            }
+            if (!result.length) {
+                return response.forbidden(res, "wrong_token", "You are not a seller!");
+            }
+            next();
+        }
+    );
+}
+
+exports.adminCheck = function (req, res, next) {
+    db.query(
+        `SELECT *
+         FROM user u
+         WHERE u.id = ${db.escape(req.user_id)}
+           AND u.type = 'administrator';`,
         (err, result, fields) => {
             if (err) {
                 return response.internalError(res, err);

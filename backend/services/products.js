@@ -244,6 +244,15 @@ async function getSellerProduct(user_id, product_id) {
     return results;
 }
 
+async function addSellerProduct(user_id, title, description, description_full, price, discount, amount) {
+    const [results,] = await db.promise().query(
+        `INSERT INTO product (title, description, description_full, price, discount, amount, seller_id)
+         VALUES (?, ?, ?, ?, ?, ?, ?);`,
+        [title, description, description_full, price, discount, amount, user_id]
+    );
+    return results;
+}
+
 async function editSellerProduct(user_id, product_id, title, description, description_full, price, discount, amount, visible) {
     const [results,] = await db.promise().query(
         `UPDATE product p
@@ -368,6 +377,7 @@ module.exports = {
     // seller
     getSellerProducts,
     getSellerProduct,
+    addSellerProduct,
     editSellerProduct,
     addImage,
     editImage,

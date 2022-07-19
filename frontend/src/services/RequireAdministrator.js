@@ -4,7 +4,7 @@ import ErrorPage from "../components/ErrorPage";
 function RequireBuyer(props) {
     //let location = useLocation();
 
-    if (props.auth && props.auth.user.type === "buyer") {
+    if (props.auth && props.auth.user.type === "administrator") {
         return props.children;
     } else {
         //return <Navigate to="/login" state={{from: location}} replace/>

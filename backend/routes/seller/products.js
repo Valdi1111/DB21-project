@@ -27,11 +27,25 @@ router.get(
             const results = await products.getSellerProduct(req.user_id, id);
             // nothing found
             if (!results.length) {
-                return response.notFound(res, "product_not_found", "No product found with id " + id + "!");
+                return response.conflict(res, "product_not_found", "No product found with id " + id + "!");
             }
             return res.json(results[0]);
         } catch (err) {
             console.error("Error on GET seller/products/:id.");
+            next(err);
+        }
+    }
+);
+
+router.post(
+    "/",
+    async (req, res, next) => {
+        try {
+            const {title, description, description_full, price, discount, amount} = req.body;
+            const results = await products.addSellerProduct(req.user_id, title, description, description_full, price, discount, amount);
+            return res.json({id: results.insertId});
+        } catch (err) {
+            console.error("Error on POST seller/products.");
             next(err);
         }
     }
@@ -95,7 +109,7 @@ router.delete(
             const [r1, r2] = await products.removeImage(req.user_id, id);
             // nothing found
             if (!r1.length) {
-                return response.notFound(res, "image_not_found", "No image found with id " + id + "!");
+                return response.conflict(res, "image_not_found", "No image found with id " + id + "!");
             }
             const file = path.join(__dirname, "..", "..", "uploads", "products", r1[0].path);
             fs.unlinkSync(file);

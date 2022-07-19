@@ -81,7 +81,6 @@ function Login(props) {
                             <label htmlFor="email_login">Email address</label>
                             <div className="invalid-feedback">Please insert a valid email.</div>
                         </div>
-
                         {/* Password input */}
                         <div className="form-floating mb-2">
                             <input type="password" id="password_login" className="form-control form-control-lg"
@@ -89,7 +88,6 @@ function Login(props) {
                             <label htmlFor="password_login">Password</label>
                             <div className="invalid-feedback">Please insert a valid password.</div>
                         </div>
-
                         <div className="d-flex justify-content-between align-items-center mb-3">
                             {/* Checkbox */}
                             <div className="form-check">
@@ -99,15 +97,13 @@ function Login(props) {
                             </div>
                             <a href="#">Forgot password?</a>
                         </div>
-
                         {/* Submit button */}
                         <button type="submit" className="btn btn-primary btn-lg btn-block w-100">Sign in</button>
-
+                        <p className="my-2">Do you already have an account? <a href="/register">Register</a></p>
                         {/* Separator */}
                         <div className="divider d-flex align-items-center my-4">
                             <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
                         </div>
-
                         {/* Social buttons */}
                         <div className="d-flex justify-content-around align-items-center">
                             <a href="#" className="h2 btn-social" style={{color: "#dd4b39"}}>

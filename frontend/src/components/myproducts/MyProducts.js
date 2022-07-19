@@ -3,6 +3,7 @@ import $ from "jquery";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {api_seller_url, product_images_url} from "../../services/ApiUrls";
+import MyProductAdd from "./product/MyProductAdd";
 
 function Product(props) {
     const navigate = useNavigate();
@@ -52,10 +53,16 @@ function MyProducts(props) {
 
     return (
         <main className="flex-grow-1 py-3 row mx-0">
-                {products.map(p => <Product key={p.id} product={p}/>)}
-                <div className="col-12">
-                    <button className="form-control btn btn-primary" onClick={handleNext}>Next</button>
-                </div>
+            <div className="col-12">
+                <button type="button" className="form-control btn btn-primary mb-3" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop">Add product
+                </button>
+            </div>
+            <MyProductAdd auth={props.auth}/>
+            {products.map(p => <Product auth={props.auth} key={p.id} product={p}/>)}
+            <div className="col-12">
+                <button type="button" className="form-control btn btn-primary" onClick={handleNext}>Next</button>
+            </div>
         </main>
     );
 

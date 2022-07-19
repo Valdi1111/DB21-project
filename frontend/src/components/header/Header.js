@@ -42,15 +42,22 @@ function Header(props) {
                             <li><Link to="/my-products" className="dropdown-item">Products</Link></li> :
                             <></>
                         }
-                        <li><Link to="/settings/profile" className="dropdown-item">Settings</Link></li>
+                        {props.auth.user.type === "buyer" || props.auth.user.type === "seller" ?
+                            <>
+                                <li><Link to="/chat" className="dropdown-item">Chat</Link></li>
+                                <li><Link to="/settings/profile" className="dropdown-item">Settings</Link></li>
+                            </> :
+                            <></>
+                        }
+                        {props.auth.user.type === "administrator" ?
+                            <li><Link to="/dashboard" className="dropdown-item">Dashboard</Link></li> :
+                            <></>
+                        }
                         <li>
                             <hr className="dropdown-divider"/>
                         </li>
-                        <li>
-                            <span className="dropdown-item" style={{cursor: "pointer"}} onClick={handleLogout}>
-                                Sign out
-                            </span>
-                        </li>
+                        <li><span className="dropdown-item" style={{cursor: "pointer"}}
+                                  onClick={handleLogout}>Sign out</span></li>
                     </ul>
                 </div>
             </div>
@@ -61,7 +68,7 @@ function Header(props) {
         return (
             <div className="text-end">
                 <Link to="/login" state={{from: location}} replace className="btn btn-outline-primary me-2">Login</Link>
-                <button type="button" className="btn btn-primary">Sign-up</button>
+                <Link to="/register" state={{from: location}} replace className="btn btn-primary">Register</Link>
             </div>
         );
     }

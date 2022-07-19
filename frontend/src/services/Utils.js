@@ -32,3 +32,31 @@ export function formatDiscount(percentage) {
     const formatter = new Intl.NumberFormat(locale, opts);
     return formatter.format(percentage / 100);
 }
+
+export function formatCreditCardType(type) {
+    const cc = {
+        visa: "Visa",
+        mastercard: "Master Card",
+        american_express: "American Express",
+        discover: "Discover"
+    }
+    return cc[type];
+}
+
+export function formatCreditCard(type, number) {
+    const cc = {
+        visa: "Visa",
+        mastercard: "Master Card",
+        american_express: "American Express",
+        discover: "Discover"
+    }
+    return cc[type] + ", ***" + number.substr(number.length - 3);
+}
+
+export function formatStreet(street, civic) {
+    return street + ", " + civic;
+}
+
+export function formatCity(city, district, postal_code) {
+    return city + " " + district + ", " + postal_code;
+}

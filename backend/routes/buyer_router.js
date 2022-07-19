@@ -8,6 +8,7 @@ const cart = require("./buyer/cart");
 const checkout = require("./buyer/checkout");
 const orders = require("./buyer/orders");
 const products = require("./buyer/products");
+const chat = require("./buyer/chat");
 
 router.use("/profile", profile);
 router.use("/shipments", shipments);
@@ -16,5 +17,6 @@ router.use("/cart", cart);
 router.use("/checkout", checkout);
 router.use("/orders", orders);
 router.use("/products", products);
+router.use("/chat", chat);
 
 module.exports = router;

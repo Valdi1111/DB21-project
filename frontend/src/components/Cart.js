@@ -5,7 +5,7 @@ import axios from "axios";
 import $ from "jquery";
 import {api_buyer_url} from "../services/ApiUrls";
 import {useNavigate} from "react-router-dom";
-import {formatPrice} from "../services/Utils";
+import {formatCreditCard, formatPrice, formatStreet} from "../services/Utils";
 import {toast} from "wc-toast";
 
 function CartProduct(props) {
@@ -112,10 +112,31 @@ function CartProduct(props) {
 
 function Cart(props) {
     const [products, setProducts] = useState([]);
+    const [shipments, setShipments] = useState([]);
+    const [payments, setPayments] = useState([]);
+    const [balance, setBalance] = useState(0);
     const [total, setTotal] = useState(0);
 
     useEffect(() => {
         reload();
+        axios
+            .get(
+                `${api_buyer_url}shipments`,
+                {headers: {"x-access-token": props.auth.token}}
+            )
+            .then(res => setShipments(res.data));
+        axios
+            .get(
+                `${api_buyer_url}payments`,
+                {headers: {"x-access-token": props.auth.token}}
+            )
+            .then(res => setPayments(res.data));
+        axios
+            .get(
+                `${api_buyer_url}profile/balance`,
+                {headers: {"x-access-token": props.auth.token}}
+            )
+            .then(res => setBalance(res.data.balance));
     }, []);
 
     function reload() {
@@ -134,6 +155,40 @@ function Cart(props) {
             });
     }
 
+    function checkout(e) {
+        if (!products.length) {
+            toast.error("Add at least a product first!");
+            return;
+        }
+        const s = $("#shipment").val();
+        const p = $("#payment").val();
+        if (!s || s === "auto") {
+            toast.error("Select a shipment address!");
+            return;
+        }
+        if (!p || p === "auto") {
+            toast.error("Select a payment method!");
+            return;
+        }
+        axios
+            .post(
+                `${api_buyer_url}checkout`,
+                {payment: p, shipment: s},
+                {headers: {"x-access-token": props.auth.token}}
+            )
+            .then(
+                res => {
+                    toast.success("Order placed successfully!");
+                    reload();
+                },
+                err => toast.error("An error occurred...")
+            );
+    }
+
+    function bal() {
+        return balance > total ? total : balance;
+    }
+
     function CartCheckout() {
 
         return (
@@ -144,20 +199,46 @@ function Cart(props) {
                             <span className="lead fw-normal">Cart</span>
                         </div>
                         <div className="d-flex flex-column">
-                            <button className="btn btn-outline-primary" type="button">Checkout</button>
+                            <button className="btn btn-outline-primary" type="button" onClick={checkout}>Checkout
+                            </button>
                         </div>
                     </div>
                     <hr className="my-3"/>
                     <div className="d-flex justify-content-between">
                         <div className="d-flex flex-column">
-                            <span className="lead fw-normal">Price</span>
+                            <select id="shipment" className="form-select" defaultValue="auto"
+                                    aria-label="shipment selection">
+                                <option value="auto">Select shipment address</option>
+                                {shipments.map(s =>
+                                    <option key={s.id} value={s.id}>{formatStreet(s.street, s.civic_number)}</option>
+                                )}
+                            </select>
                         </div>
                         <div className="d-flex flex-column">
-                            <span className="lead fw-normal">Amount</span>
+                            <div className="input-group">
+                                <select id="payment" className="form-select" defaultValue="auto"
+                                        aria-label="shipment selection">
+                                    <option value="auto">Select payment method</option>
+                                    {payments.map(p =>
+                                        <option key={p.id} value={p.id}>{formatCreditCard(p.type, p.number)}</option>
+                                    )}
+                                </select>
+                                <input id="cvc" type="tel" className="form-select" maxLength={3} placeholder="cvc"/>
+                            </div>
                         </div>
                         <div className="d-flex flex-column">
-                            <span className="lead fw-normal">Total</span>
-                            <span className="text-muted small">{formatPrice(total)}</span>
+                            <div className="d-flex flex-row">
+                                <div className="d-flex flex-column me-4">
+                                    <span className="text-muted small">subtotal</span>
+                                    <span className="text-muted small">balance</span>
+                                </div>
+                                <div className="d-flex flex-column text-end">
+                                    <span className="text-muted small">{formatPrice(total)}</span>
+                                    <span className="text-muted small">-{formatPrice(bal())}</span>
+                                    <hr className="my-1"/>
+                                    <span className="text-muted small">{formatPrice(total - bal())}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

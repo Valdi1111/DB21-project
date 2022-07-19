@@ -1,16 +1,6 @@
 const db = require('./db');
 
 async function getAll(user_id) {
-    //     (SELECT ohs.date
-    // FROM order_has_state ohs
-    // WHERE ohs.order_id = o.id
-    // ORDER BY ohs.date DESC
-    // LIMIT 1)                   AS state,
-    //     (SELECT ohs.date
-    // FROM order_has_state ohs
-    // WHERE ohs.order_id = o.id
-    // ORDER BY ohs.date
-    // LIMIT 1)
     const [results,] = await db.promise().query(
         `SELECT o.id,
                 SUM(ohp.price * ohp.amount) AS total,
@@ -102,14 +92,11 @@ async function getOrderStates(user_id, order_id) {
     return results;
 }
 
-async function addOrder(user_id, shipment_id, payment) {
+async function addOrder(shipment_id, payment_type, payment_data) {
     const [results,] = await db.promise().query(
-        `INSERT INTO \`order\` (payment_type, shipment_id)
-         SELECT ?, s.id
-         FROM shipment s
-         WHERE s.buyer_id = ?
-           AND s.id = ?`,
-        [payment, user_id, shipment_id]
+        `INSERT INTO \`order\` (payment_type, payment_data, shipment_id)
+         VALUES (?, ?, ?);`,
+        [payment_type, payment_data, shipment_id]
     );
     return results;
 }
@@ -129,11 +116,37 @@ async function addOrderProductsFromCart(user_id, order_id) {
     return results;
 }
 
-async function addOrderState(user_id, order_id, state) {
+async function addOrderState(order_id, state) {
     const [results,] = await db.promise().query(
         `INSERT INTO order_has_state (order_id, state)
          VALUES (?, ?);`,
-        [order_id, state, user_id]
+        [order_id, state]
+    );
+    return results;
+}
+
+async function getAllAdmin() {
+    const [results,] = await db.promise().query(
+        `SELECT o.id,
+                u.email,
+                b.name,
+                b.surname,
+                (SELECT ohs.date
+                 FROM order_has_state ohs
+                 WHERE ohs.order_id = o.id
+                 ORDER BY ohs.date
+                 LIMIT 1) AS date,
+                (SELECT ohs.state
+                 FROM order_has_state ohs
+                 WHERE ohs.order_id = o.id
+                 ORDER BY ohs.date DESC
+                 LIMIT 1) AS state
+         FROM \`order\` o
+                  INNER JOIN shipment s ON o.shipment_id = s.id
+                  INNER JOIN user u ON s.buyer_id = u.id
+                  INNER JOIN buyer b ON s.buyer_id = b.id
+         ORDER BY date DESC;`,
+        []
     );
     return results;
 }
@@ -145,5 +158,6 @@ module.exports = {
     getOrderStates,
     addOrder,
     addOrderProductsFromCart,
-    addOrderState
+    addOrderState,
+    getAllAdmin
 }

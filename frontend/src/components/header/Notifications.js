@@ -21,6 +21,14 @@ function Notifications(props) {
         setNotifications(notifications.filter(n => n.id !== id));
     }
 
+    function notificationNumber() {
+        if(!notifications || !notifications.length) {
+            return <></>;
+        }
+        return <span className="position-absolute top-0 start-50 translate-middle-y badge rounded-pill bg-danger"
+                     style={{fontSize: "70%", padding: ".25rem .35rem"}}>{notifications?.length}</span>;
+    }
+
     return (
         <div className="dropdown text-end">
             {/* SOTTO dropdown-toggle */}
@@ -28,8 +36,7 @@ function Notifications(props) {
                  id="dropdown-notifications" data-bs-toggle="dropdown" aria-expanded="false">
                 <div className="position-relative w-100 h-100">
                     <FontAwesomeIcon icon={faBell} className="text-secondary w-100 h-100"/>
-                    <span className="position-absolute top-0 start-50 translate-middle-y badge rounded-pill bg-danger"
-                          style={{fontSize: "70%", padding: ".25rem .35rem"}}>{notifications?.length}</span>
+                    {notificationNumber()}
                 </div>
             </div>
             <div className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-notifications" style={{width: "21rem"}}>

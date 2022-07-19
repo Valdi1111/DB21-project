@@ -5,7 +5,7 @@ import "../css/order.css"
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {api_buyer_url} from "../services/ApiUrls";
-import {formatDateTime} from "../services/Utils";
+import {formatCity, formatCreditCardType, formatDate, formatDateTime, formatStreet} from "../services/Utils";
 
 function OrderProduct(props) {
     const navigate = useNavigate();
@@ -19,7 +19,8 @@ function OrderProduct(props) {
                     </div>
                     <div className="d-flex flex-column">
                         <button className="btn btn-outline-primary" type="button"
-                                onClick={e => navigate("/product/" + props.product.id)}>See details</button>
+                                onClick={e => navigate("/product/" + props.product.id)}>See details
+                        </button>
                     </div>
                 </div>
                 <hr className="my-3"/>
@@ -87,18 +88,18 @@ function Order(props) {
                         <div className="d-flex flex-column">
                             <span className="lead fw-normal">Shipment</span>
                             <span className="text-muted small">
-                                {order.shipment_street + ", "
-                                + order.shipment_civic_number}
+                                {formatStreet(order.shipment_street,
+                                    order.shipment_civic_number)}
                             </span>
                             <span className="text-muted small">
-                                {order.shipment_city + " "
-                                + order.shipment_district + ", "
-                                + order.shipment_postal_code}
+                                {formatCity(order.shipment_city,
+                                    order.shipment_district,
+                                    order.shipment_postal_code)}
                             </span>
                         </div>
                         <div className="d-flex flex-column">
                             <span className="lead fw-normal">Payment</span>
-                            <span className="text-muted small">{order.payment_type}</span>
+                            <span className="text-muted small">{formatCreditCardType(order.payment_type)}</span>
                             <span className="text-muted small">{order.payment_data}</span>
                         </div>
                         <div className="d-flex flex-column">
@@ -116,6 +117,18 @@ function Order(props) {
             return <></>;
         }
 
+        function isState(state) {
+            return states.find(s => s.state === state);
+        }
+
+        function getDate(state) {
+            const st = states.find(s => s.state === state);
+            if (!st) {
+                return "---";
+            }
+            return formatDate(st.date);
+        }
+
         return (
             <div className="card card-stepper">
                 <div className="card-body p-4">
@@ -125,37 +138,38 @@ function Order(props) {
                     </div>
                     <hr className="my-4"/>
                     <div className="d-flex flex-row justify-content-between align-items-center align-content-center">
-                        <span className="dot"/>
+                        <span className={"dot" + (isState("created") ? " dot-active" : "")}/>
                         <hr className="flex-fill track-line"/>
-                        <span className="dot"/>
+                        <span className={"dot" + (isState("accepted") ? " dot-active" : "")}/>
                         <hr className="flex-fill track-line"/>
-                        <span className="dot"/>
+                        <span className={"dot" + (isState("shipped") ? " dot-active" : "")}/>
                         <hr className="flex-fill track-line"/>
-                        <span className="dot"/>
-                        <hr className="flex-fill track-line"/>
-                        <span className="d-flex justify-content-center align-items-center big-dot dot">
-                        <FontAwesomeIcon icon={faCheck} className={"text-white"}/>
-                    </span>
+                        {
+                            isState("received")
+                                ?
+                                <span className="d-flex justify-content-center align-items-center big-dot dot">
+                                    <FontAwesomeIcon icon={faCheck} className={"text-white"}/>
+                                </span>
+                                :
+                                <span className="dot"/>
+                        }
                     </div>
                     <div className="d-flex flex-row justify-content-between align-items-center">
                         <div className="d-flex flex-column align-items-start">
-                            <span>15 Mar</span>
                             <span>Order placed</span>
-                        </div>
-                        <div className="d-flex flex-column justify-content-center">
-                            <span>15 Mar</span>
-                            <span>Order processed</span>
-                        </div>
-                        <div className="d-flex flex-column justify-content-center align-items-center">
-                            <span>15 Mar</span>
-                            <span>Order shipped</span>
+                            <span>{getDate("created")}</span>
                         </div>
                         <div className="d-flex flex-column align-items-center">
-                            <span>15 Mar</span>
-                            <span>Out for delivery</span></div>
+                            <span>Order shipped</span>
+                            <span>{getDate("accepted")}</span>
+                        </div>
+                        <div className="d-flex flex-column align-items-center">
+                            <span>Out for delivery</span>
+                            <span>{getDate("shipped")}</span>
+                        </div>
                         <div className="d-flex flex-column align-items-end">
-                            <span>15 Mar</span>
                             <span>Arrived</span>
+                            <span>{getDate("received")}</span>
                         </div>
                     </div>
                 </div>

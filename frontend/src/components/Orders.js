@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {api_buyer_url} from "../services/ApiUrls";
 import {useNavigate} from "react-router-dom";
-import {formatDateTime} from "../services/Utils";
+import {formatCity, formatDateTime, formatStreet} from "../services/Utils";
 
 function Order(props) {
     const navigate = useNavigate();
@@ -17,7 +17,8 @@ function Order(props) {
                     </div>
                     <div>
                         <button className="btn btn-outline-primary" type="button"
-                                onClick={e => navigate("/order/" + props.order.id)}>See details</button>
+                                onClick={e => navigate("/order/" + props.order.id)}>See details
+                        </button>
                     </div>
                 </div>
                 <hr className="my-4"/>
@@ -25,14 +26,14 @@ function Order(props) {
                     <div className="d-flex flex-column">
                         <span className="lead fw-normal">Shipment</span>
                         <span className="text-muted small">
-                                {props.order.shipment_street + ", "
-                                + props.order.shipment_civic_number}
-                            </span>
+                            {formatStreet(props.order.shipment_street,
+                                props.order.shipment_civic_number)}
+                        </span>
                         <span className="text-muted small">
-                                {props.order.shipment_city + " "
-                                + props.order.shipment_district + ", "
-                                + props.order.shipment_postal_code}
-                            </span>
+                            {formatCity(props.order.shipment_city,
+                                props.order.shipment_district,
+                                props.order.shipment_postal_code)}
+                        </span>
                     </div>
                     <div className="d-flex flex-column">
                         <span className="lead fw-normal">Total</span>

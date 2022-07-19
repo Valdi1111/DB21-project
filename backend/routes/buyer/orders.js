@@ -23,7 +23,7 @@ router.get(
             const results = await orders.get(req.user_id, id);
             // nothing found
             if (!results.length) {
-                return response.notFound(res, "order_not_found", "No order found with id " + id + "!");
+                return response.conflict(res, "order_not_found", "No order found with id " + id + "!");
             }
             return res.json(results[0]);
         } catch (err) {

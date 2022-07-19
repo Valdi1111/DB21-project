@@ -1,4 +1,5 @@
 import {Navigate, useLocation} from "react-router-dom";
+import ErrorPage from "../components/ErrorPage";
 
 function RequireSeller(props) {
     //let location = useLocation();
@@ -7,7 +8,7 @@ function RequireSeller(props) {
         return props.children;
     } else {
         //return <Navigate to="/login" state={{from: location}} replace/>
-        return <></>;
+        return <ErrorPage title="Access denied" name="Home" link="/"/>;
     }
 }
 

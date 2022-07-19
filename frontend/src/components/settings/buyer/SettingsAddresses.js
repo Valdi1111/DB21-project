@@ -31,24 +31,23 @@ function SettingsAddresses(props) {
     function onAdd(e) {
         e.preventDefault();
         if (e.target.checkValidity()) { // use can also use e.target.reportValidity
-            const data = {
-                name: name.current.value,
-                street: street.current.value,
-                civic_number: civicNumber.current.value,
-                postal_code: postalCode.current.value,
-                city: city.current.value,
-                district: district.current.value
-            };
             axios
                 .post(
                     `${api_buyer_url}shipments`,
-                    data,
+                    {
+                        name: name.current.value,
+                        street: street.current.value,
+                        civic_number: civicNumber.current.value,
+                        postal_code: postalCode.current.value,
+                        city: city.current.value,
+                        district: district.current.value
+                    },
                     {headers: {"x-access-token": props.auth.token}}
                 )
                 .then(
                     res => {
-                        toast.success("Address address added successfully!");
-                        document.getElementById("shipment-add").classList.remove("show");
+                        toast.success("Address added successfully!");
+                        $("#shipment-add").removeClass("show")
                         name.current.value = "";
                         street.current.value = "";
                         civicNumber.current.value = "";
@@ -126,7 +125,7 @@ function SettingsAddresses(props) {
             )
             .then(
                 res => {
-                    toast.success("AddAddress deleted successfully!");
+                    toast.success("Address deleted successfully!");
                     refresh();
                 },
                 err => toast.error("An error occurred...")

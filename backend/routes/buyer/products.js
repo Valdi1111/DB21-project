@@ -81,7 +81,7 @@ router.get(
             const {id} = req.params;
             const results = await products.getReviewHelpful(req.user_id, id);
             if (!results.length) {
-                return response.notFound(res, "review_not_found", "No review found with id " + id + "!");
+                return response.conflict(res, "review_not_found", "No review found with id " + id + "!");
             }
             return res.json(results[0]);
         } catch (err) {

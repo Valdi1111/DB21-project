@@ -10,6 +10,17 @@ async function getAll(user_id) {
     return results;
 }
 
+async function getById(user_id, payment_id) {
+    const [results,] = await db.promise().query(
+        `SELECT p.id, p.type, p.number, p.owner, p.expire
+         FROM payment p
+         WHERE p.buyer_id = ?
+           AND p.id = ?;`,
+        [user_id, payment_id]
+    );
+    return results;
+}
+
 async function add(user_id, type, number, owner, expire) {
     const [results,] = await db.promise().query(
         `INSERT INTO payment (type, number, owner, expire, buyer_id)
@@ -32,6 +43,7 @@ async function remove(user_id, payment_id) {
 
 module.exports = {
     getAll,
+    getById,
     add,
     remove
 }

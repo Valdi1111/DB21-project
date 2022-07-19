@@ -31,6 +31,19 @@ router.put(
     }
 );
 
+router.get(
+    "/balance",
+    async (req, res, next) => {
+        try {
+            const results = await profile.getBuyerBalance(req.user_id);
+            return res.json(results[0]);
+        } catch (err) {
+            console.error("Error on GET buyer/profile/balance.");
+            next(err);
+        }
+    }
+);
+
 router.post(
     "/redeem",
     async (req, res, next) => {
@@ -38,13 +51,13 @@ router.post(
             const {code} = req.body;
             const results = await coupon.getByCode(code);
             if(!results.length) {
-                return response.notFound(res, "coupon_not_found", "No coupon found with code " + code + "!");
+                return response.conflict(res, "coupon_not_found", "No coupon found with code " + code + "!");
             }
-            if(results.expired) {
-                return response.notFound(res, "coupon_expired", "Coupon with code " + code + " is expired!");
+            if(results[0].expired) {
+                return response.conflict(res, "coupon_expired", "Coupon with code " + code + " has expired!");
             }
-            if(results.used) {
-                return response.notFound(res, "coupon_already_redeemed", "Coupon with code " + code + " has already been redeemed!");
+            if(results[0].used) {
+                return response.conflict(res, "coupon_already_redeemed", "Coupon with code " + code + " has already been redeemed!");
             }
             await coupon.use(req.user_id, results[0].id);
             await profile.increaseBuyerBalance(req.user_id, results[0].value);
