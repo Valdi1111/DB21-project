@@ -1,4 +1,5 @@
-export const url = "https://store.valdi.ovh/";
+//export const url = "https://store.valdi.ovh/";
+export const url = "/";
 export const api_url = url + "api/v1/";
 export const api_auth_url = api_url + "auth/";
 export const api_user_url = api_url + "user/";
